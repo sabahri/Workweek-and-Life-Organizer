@@ -560,7 +560,10 @@ table.pantry tfoot td{background:var(--paper);border-top:2px solid var(--line);b
 table.pantry tfoot input{background:var(--sheet)}
 table.pantry tfoot tr.ptotrow td{background:var(--sheet);border-top:1px solid var(--line);padding:9px 10px;font-weight:700;font-variant-numeric:tabular-nums}
 table.pantry tfoot tr.ptotrow td.n{text-align:right;font:700 16px/1.2 var(--display)}
-table.pantry tfoot tr.ptotrow .u{font:400 12px var(--body);color:var(--muted);margin-left:4px}
+table.pantry tfoot tr.pdays td{background:var(--sheet);border-top:1px solid var(--line);padding:7px 10px;font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px}
+table.pantry tfoot tr.pdays td.n{text-align:right;color:var(--ink);font:700 16px/1.2 var(--display)}
+table.pantry tfoot tr.pdays input.pdn{width:4.6rem;display:inline-block;padding:2px 5px;margin:0 3px;border:1px solid var(--line);border-radius:5px;background:var(--paper);font-size:13px;text-align:right}
+table.pantry tfoot tr.pdays .u,table.pantry tfoot tr.ptotrow .u{font:400 12px var(--body);color:var(--muted);margin-left:4px}
 table.pantry tfoot input::placeholder{color:var(--muted)}
 .pkey{display:inline-flex;gap:12px;font-size:12px;color:var(--muted)}
 .pkey i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
@@ -766,6 +769,8 @@ function isoWeek(d){const x=new Date(Date.UTC(d.getFullYear(),d.getMonth(),d.get
 function defaults(){return{themes:[
   {id:'work',name:'Work',color:SW[0],show:true},
   {id:'personal',name:'Personal',color:SW[1],show:true}],tasks:[],goals:[],events:[],tags:[],evtypes:JSON.parse(JSON.stringify(EVT)),settings:{today:HI_DEFAULT}}}
+function packBase(q,unit){ const f={g:1,gr:1,gram:1,grams:1,ml:1,kg:1000,kilo:1000,l:1000,liter:1000,litre:1000,cl:10,dl:100}[String(unit||'').trim().toLowerCase()]; return f&&typeof q==='number'&&q>0?q*f:null; }
+function deriveK100(it,p){ if(typeof p.kcal!=='number') return; const b=packBase(p.qty,it.unit); if(b) p.k100=Math.round(p.kcal/b*1000)/10; }
 function normalize(s){
   s=(s&&typeof s==='object')?JSON.parse(JSON.stringify(s)):{};
   if(!Array.isArray(s.themes)||!s.themes.length) s.themes=defaults().themes;
@@ -784,7 +789,7 @@ function normalize(s){
   if(!Array.isArray(s.events)) s.events=[];
   if(!s.water||typeof s.water!=='object') s.water={};
   if(!Array.isArray(s.pantry)) s.pantry=[];
-  s.pantry.forEach(it=>{ if(!Array.isArray(it.packs)){ const pk={id:uid()}; if(typeof it.qty==='number') pk.qty=it.qty; if(it.exp) pk.exp=it.exp; it.packs=[pk]; } delete it.qty; delete it.exp; if(typeof it.kcal==='number'){ it.packs.forEach(p=>{ if(typeof p.kcal!=='number') p.kcal=it.kcal; }); } delete it.kcal; });
+  s.pantry.forEach(it=>{ if(!Array.isArray(it.packs)){ const pk={id:uid()}; if(typeof it.qty==='number') pk.qty=it.qty; if(it.exp) pk.exp=it.exp; it.packs=[pk]; } delete it.qty; delete it.exp; if(typeof it.kcal==='number'){ it.packs.forEach(p=>{ if(typeof p.kcal!=='number') p.kcal=it.kcal; }); } delete it.kcal; if(typeof it.k100==='number'){ it.packs.forEach(p=>{ if(typeof p.k100!=='number') p.k100=it.k100; }); } delete it.k100; it.packs.forEach(p=>{ if(typeof p.k100!=='number') deriveK100(it,p); }); });
   if(!Array.isArray(s.recipes)) s.recipes=[];
   s.recipes.forEach(r=>{ if(!Array.isArray(r.sections)||!r.sections.length) r.sections=[{id:uid(),title:'Ingredients',items:[]}]; r.sections.forEach(x=>{ if(!Array.isArray(x.items)) x.items=[]; if(!Array.isArray(x.comps)) x.comps=[]; x.comps.forEach(c=>{ if(!Array.isArray(c.items)) c.items=[]; }); }); if(!(r.servings>0)) r.servings=1; });
   if(!Array.isArray(s.recipeCats)) s.recipeCats=RCAT_SEED.map(([name,color])=>({id:uid(),name,color}));
@@ -1515,6 +1520,9 @@ const itemExp=it=>it.packs.map(p=>p.exp).filter(Boolean).sort((a,b)=>effExp(a)<e
 const packCmp=(a,b)=>(!a.exp)-(!b.exp)||(effExp(a.exp)<effExp(b.exp)?-1:effExp(a.exp)>effExp(b.exp)?1:0);
 const itemQty=it=>{ const q=it.packs.filter(p=>typeof p.qty==='number'); return q.length?Math.round(q.reduce((n,p)=>n+p.qty,0)*1000)/1000:null; };
 const itemKcal=it=>{ const q=it.packs.filter(p=>typeof p.kcal==='number'); return q.length?Math.round(q.reduce((n,p)=>n+p.kcal,0)):null; };
+const P_PER={g:1,gr:1,gram:1,grams:1,ml:1,kg:1000,kilo:1000,l:1000,liter:1000,litre:1000,cl:10,dl:100};
+const per100Base=(q,unit)=>{ const f=P_PER[String(unit||'').trim().toLowerCase()]; return f&&typeof q==='number'?q*f:null; };
+function applyK100(it){ it.packs.forEach(p=>{ if(typeof p.k100!=='number') return; const b=per100Base(p.qty,it.unit); if(b!=null) p.kcal=Math.round(b*p.k100/100); }); }
 const pantryStatus=it=>expStatus(itemExp(it));
 const fmtExp=showExp;
 function renderPantry(){
@@ -1556,8 +1564,10 @@ function renderPantry(){
     const el=h('input',Object.assign({'data-k':k,value:obj[field]==null?'':String(obj[field])},attrs||{}));
     el.addEventListener('change',()=>{
       let v=el.value.trim();
-      if(field==='qty'||field==='kcal'){ if(v===''){ delete obj[field]; } else { const n=Number(v.replace(',','.')); if(isFinite(n)) obj[field]=n; else { el.value=obj[field]??''; return; } } }
+      if(field==='qty'||field==='kcal'||field==='k100'){ if(v===''){ delete obj[field]; } else { const n=Number(v.replace(',','.')); if(isFinite(n)) obj[field]=n; else { el.value=obj[field]??''; return; } } }
       else if(v) obj[field]=v; else if(field!=='name') delete obj[field]; else { el.value=obj.name; return; }
+      if(field==='kcal'){ const own=S.state.pantry.find(x=>x.packs.includes(obj)); if(own){ if(typeof obj.kcal==='number') deriveK100(own,obj); else delete obj.k100; } }
+      if(field==='qty'||field==='unit'||field==='k100'){ S.state.pantry.forEach(applyK100); S.state.pantry.forEach(x=>x.packs.forEach(p=>{ if(typeof p.k100!=='number') deriveK100(x,p); })); after='commit'; }
       if(after!=='commit'){ save(); return; }
       if(el.type==='date'){ save(); dirty=true; return; }   // dates re-sort on blur, so typing a date isn't interrupted
       setTimeout(()=>commit(),0);
@@ -1588,7 +1598,7 @@ function renderPantry(){
     nameIn.addEventListener('change',()=>{ const v=nameIn.value.trim(); if(v){ it.name=v; save(); } else nameIn.value=it.name; });
     nameIn.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); nameIn.blur(); } });
     const one=it.packs.length===1?it.packs[0]:null;
-    const addPack=()=>{ const last=it.packs[it.packs.length-1]; const pk={id:uid()}; if(last&&typeof last.qty==='number') pk.qty=last.qty; if(last&&typeof last.kcal==='number') pk.kcal=last.kcal; it.packs.push(pk); P.open.add(it.id); S.focus=`pk:${pk.id}:exp`; commit(); };
+    const addPack=()=>{ const last=it.packs[it.packs.length-1]; const pk={id:uid()}; if(last&&typeof last.qty==='number') pk.qty=last.qty; if(last&&typeof last.kcal==='number') pk.kcal=last.kcal; if(last&&typeof last.k100==='number') pk.k100=last.k100; it.packs.push(pk); applyK100(it); P.open.add(it.id); S.focus=`pk:${pk.id}:exp`; commit(); };
     rows.push(h('tr',{class:'pitemrow '+st.cls+(tq===0?' empty':'')},
       h('td',{},h('div',{class:'pname'},
         multi?h('button',{class:'ptog','aria-expanded':String(open),'aria-label':open?`Hide ${it.name} packs`:`Show all ${it.packs.length} packs of ${it.name}`,'data-k':`pt:${it.id}`,onclick:toggle},open?'▾':'▸'):h('span',{class:'ptogsp'}),
@@ -1599,6 +1609,11 @@ function renderPantry(){
             onclick:()=>{ P.open.add(it.id); const first=[...it.packs].sort(packCmp)[0]; if(first) S.focus=`pk:${first.id}:qty`; render(); }},
             tq==null?'—':String(tq),h('span',{class:'ptedit','aria-hidden':'true',text:'✎'}))),
       inp(it,'unit',`p:${it.id}:unit`,{type:'text',list:'punits','aria-label':`${it.name} unit`}),
+      one?inp(one,'k100',`pk:${one.id}:k100`,{type:'text',inputmode:'decimal',class:'num',placeholder:'per 100','aria-label':`${it.name} calories per 100 g or 100 ml`,title:'Calories per 100 g or 100 ml, from the label. With the amount in g, kg, ml or L, the pack’s kcal is worked out for you.'},'commit')
+         :(()=>{ const vs=[...new Set(it.packs.filter(p=>typeof p.k100==='number').map(p=>p.k100))];
+            return h('td',{class:'pro num'},h('button',{class:'ptotal',title:'Each pack has its own kcal per 100 g or ml. Click to edit them.','aria-label':`${it.name}: kcal per 100 ${vs.length>1?'varies':vs[0]??'not set'}. Edit per pack`,
+              onclick:()=>{ P.open.add(it.id); const first=[...it.packs].sort(packCmp)[0]; if(first) S.focus=`pk:${first.id}:k100`; render(); }},
+              vs.length>1?h('span',{style:'color:var(--muted);font-size:12px',text:'varies'}):vs.length?String(vs[0]):'—',h('span',{class:'ptedit','aria-hidden':'true',text:'✎'}))); })(),
       one?inp(one,'kcal',`pk:${one.id}:kcal`,{type:'text',inputmode:'decimal',class:'num',placeholder:'kcal','aria-label':`${it.name} calories`},'commit')
          :h('td',{class:'pro num'},h('button',{class:'ptotal',title:'Total calories across all packs. Click to edit each pack’s calories.','aria-label':`${it.name}: total ${tk??0} kcal. Edit pack calories`,
             onclick:()=>{ P.open.add(it.id); const first=[...it.packs].sort(packCmp)[0]; if(first) S.focus=`pk:${first.id}:kcal`; render(); }},
@@ -1618,6 +1633,7 @@ function renderPantry(){
           h('td',{}),
           inp(pk,'qty',`pk:${pk.id}:qty`,{type:'text',inputmode:'decimal',class:'num',placeholder:'amount','aria-label':`${it.name} pack ${pi+1} amount`,'data-autofocus':S.focus===`pk:${pk.id}:qty`?'1':null},'commit'),
           h('td',{class:'pro',text:it.unit||''}),
+          inp(pk,'k100',`pk:${pk.id}:k100`,{type:'text',inputmode:'decimal',class:'num',placeholder:'per 100','aria-label':`${it.name} pack ${pi+1} calories per 100 g or 100 ml`,'data-autofocus':S.focus===`pk:${pk.id}:k100`?'1':null},'commit'),
           inp(pk,'kcal',`pk:${pk.id}:kcal`,{type:'text',inputmode:'decimal',class:'num',placeholder:'kcal','aria-label':`${it.name} pack ${pi+1} calories`,'data-autofocus':S.focus===`pk:${pk.id}:kcal`?'1':null},'commit'),
           h('td',{}),
           expIn(pk,`pk:${pk.id}:exp`,`${it.name} pack ${pi+1} expiry date`,{'data-autofocus':S.focus===`pk:${pk.id}:exp`?'1':null}),
@@ -1629,7 +1645,7 @@ function renderPantry(){
   });
   // add row
   const D=P.draft||(P.draft={});
-  const addCell=(field,attrs)=>{ const el=h('input',Object.assign({value:D[field]||'','aria-label':`New item ${field==='cat'?'category':field==='exp'?'expiry date':field==='qty'?'amount':field==='kcal'?'calories':field}`},attrs||{}));
+  const addCell=(field,attrs)=>{ const el=h('input',Object.assign({value:D[field]||'','aria-label':`New item ${field==='cat'?'category':field==='exp'?'expiry date':field==='qty'?'amount':field==='kcal'?'calories':field==='k100'?'calories per 100 g or ml':field}`},attrs||{}));
     el.addEventListener('input',()=>{D[field]=el.value});
     el.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); addItem(); } });
     return h('td',{},el); };
@@ -1640,26 +1656,34 @@ function renderPantry(){
     let it=items.find(x=>x.name.trim().toLowerCase()===name.toLowerCase());
     if(it){ it.packs.push(pk); if(!it.unit&&(D.unit||'').trim()) it.unit=D.unit.trim(); if(!it.cat&&(D.cat||'').trim()) it.cat=D.cat.trim(); P.open.add(it.id); }
     else { it={id:uid(),name,packs:[pk]}; ['unit','cat','notes'].forEach(k=>{ if(D[k]&&String(D[k]).trim()) it[k]=String(D[k]).trim(); }); S.state.pantry.push(it); }
+    const kh=Number(String(D.k100||'').replace(',','.')); if(String(D.k100||'').trim()&&isFinite(kh)) pk.k100=kh; applyK100(it); if(typeof pk.k100!=='number') deriveK100(it,pk);
     P.draft={unit:D.unit||'',cat:D.cat||''}; S.focus='pantry-add'; commit();
   };
   const kTot=shown.reduce((n,it)=>n+(itemKcal(it)||0),0);
-  const totRow=h('tr',{class:'ptotrow'},h('td',{colspan:'4',text:q?`Total for ${shown.length} shown item${shown.length===1?'':'s'}`:'Total in pantry'}),
+  const totRow=h('tr',{class:'ptotrow'},h('td',{colspan:'5',text:q?`Total for ${shown.length} shown item${shown.length===1?'':'s'}`:'Total in pantry'}),
     h('td',{class:'n','aria-label':`Total calories: ${kTot}`},String(Math.round(kTot)),h('span',{class:'u',text:'kcal'})),h('td',{colspan:'5'}));
+  const ST=S.state.settings, ppl=ST.pantryPeople>0?ST.pantryPeople:4, kpp=ST.pantryKcal>0?ST.pantryKcal:2000;
+  const days=kTot/(ppl*kpp);
+  const pnum=(val,label,key,step)=>{ const el=h('input',{class:'pdn',type:'number',min:'1',step,value:String(val),'aria-label':label,'data-k':'pd:'+key});
+    el.addEventListener('change',()=>{ const n=Math.round(Number(el.value)); if(n>0){ ST[key]=n; commit(); } else el.value=String(val); });
+    el.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); el.blur(); } }); return el; };
+  const daysRow=h('tr',{class:'pdays'},h('td',{colspan:'5'},'Days of food for',pnum(ppl,'Number of people','pantryPeople','1'),'people at',pnum(kpp,'Calories per person per day','pantryKcal','50'),'kcal a day'),
+    h('td',{class:'n','aria-label':`${days.toFixed(1)} days`},(Math.round(days*10)/10).toLocaleString(undefined,{maximumFractionDigits:1}),h('span',{class:'u',text:Math.round(days*10)/10===1?'day':'days'})),h('td',{colspan:'5'}));
   const cats=[...new Set(items.map(x=>x.cat).filter(Boolean))].sort(cmpStr);
   const units=[...new Set(PUNITS.concat(items.map(x=>x.unit).filter(Boolean)))];
   const table=h('table',{class:'pantry'},
-    h('colgroup',{},h('col',{style:'width:20%'}),h('col',{style:'width:5%'}),h('col',{style:'width:7%'}),h('col',{style:'width:7%'}),h('col',{style:'width:7%'}),h('col',{style:'width:11%'}),h('col',{style:'width:10.5%'}),h('col',{style:'width:10.5%'}),h('col',{}),h('col',{style:'width:8.5rem'})),
-    h('thead',{},h('tr',{},th('Item','name'),th('Packs'),th('Amount'),th('Unit'),th('kcal'),th('Category','cat'),th('Expires','exp'),th('Status'),th('Notes'),th(''))),
-    h('tbody',{},rows.length?rows:h('tr',{},h('td',{colspan:'10',class:'pstat',style:'padding:14px 10px',text:items.length?'No items match that search.':'No items yet. Add your first one in the row below.'}))),
+    h('colgroup',{},h('col',{style:'width:17%'}),h('col',{style:'width:5%'}),h('col',{style:'width:7%'}),h('col',{style:'width:6%'}),h('col',{style:'width:7.5%'}),h('col',{style:'width:7%'}),h('col',{style:'width:11%'}),h('col',{style:'width:10.5%'}),h('col',{style:'width:10.5%'}),h('col',{}),h('col',{style:'width:8.5rem'})),
+    h('thead',{},h('tr',{},th('Item','name'),th('Packs'),th('Amount'),th('Unit'),th('kcal / 100 g·ml'),th('kcal'),th('Category','cat'),th('Expires','exp'),th('Status'),th('Notes'),th(''))),
+    h('tbody',{},rows.length?rows:h('tr',{},h('td',{colspan:'11',class:'pstat',style:'padding:14px 10px',text:items.length?'No items match that search.':'No items yet. Add your first one in the row below.'}))),
     h('tfoot',{},h('tr',{},addCell('name',{type:'text',placeholder:'+ New item or pack','data-k':'padd','data-autofocus':S.focus==='pantry-add'?'1':null}),h('td',{}),
       addCell('qty',{type:'text',inputmode:'decimal',class:'num',placeholder:'0'}),
-      addCell('unit',{type:'text',list:'punits',placeholder:'unit'}),addCell('kcal',{type:'text',inputmode:'decimal',class:'num',placeholder:'kcal'}),addCell('cat',{type:'text',list:'pcats',placeholder:'category'}),
+      addCell('unit',{type:'text',list:'punits',placeholder:'unit'}),addCell('k100',{type:'text',inputmode:'decimal',class:'num',placeholder:'per 100'}),addCell('kcal',{type:'text',inputmode:'decimal',class:'num',placeholder:'kcal'}),addCell('cat',{type:'text',list:'pcats',placeholder:'category'}),
       addCell('exp',{type:'text',placeholder:'dd-mm-yyyy','data-k':'paddexp',title:'Day-month-year, e.g. 05-11-2026, or mm-yyyy for month only'}),h('td',{}),addCell('notes',{type:'text',placeholder:'notes'}),
-      h('td',{},h('button',{class:'pill primary',style:'margin:3px 6px;padding:4px 10px',onclick:addItem},'Add'))),totRow));
+      h('td',{},h('button',{class:'pill primary',style:'margin:3px 6px;padding:4px 10px',onclick:addItem},'Add'))),totRow,daysRow));
   wrap.append(h('div',{class:'pwrap'},table),
     h('datalist',{id:'punits'},units.map(u=>h('option',{value:u}))),
     h('datalist',{id:'pcats'},cats.map(c=>h('option',{value:c}))),
-    h('p',{class:'libcount',style:'margin-top:10px',text:'Items with several packs show the closest expiry date, the number of packs, and the total amount and calories across them; click ▸ or the pack count to see each pack. Use “+ pack” to add another pack with its own date, or type an existing item’s name in the bottom row to add a pack to it. Dates are day-month-year (05-11-2026); leave out the day for month-only dates (11-2026), which count as the end of that month.'}));
+    h('p',{class:'libcount',style:'margin-top:10px',text:'Items with several packs show the closest expiry date, the number of packs, and the total amount and calories across them; click ▸ or the pack count to see each pack. Use “+ pack” to add another pack with its own date, or type an existing item’s name in the bottom row to add a pack to it. Dates are day-month-year (05-11-2026); leave out the day for month-only dates (11-2026), which count as the end of that month. Fill in kcal per 100 g or 100 ml from the label, with the amount in g, kg, ml or L, and each pack’s kcal is calculated for you. Packs of the same item can each have their own kcal per 100.'}));
   return wrap;
 }
 
