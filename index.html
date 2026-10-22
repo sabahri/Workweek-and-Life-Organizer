@@ -563,6 +563,9 @@ table.pantry tfoot tr.ptotrow td.n{text-align:right;font:700 16px/1.2 var(--disp
 table.pantry tfoot tr.pdays td{background:var(--sheet);border-top:1px solid var(--line);padding:7px 10px;font-variant-numeric:tabular-nums;color:var(--muted);font-size:13px}
 table.pantry tfoot tr.pdays td.n{text-align:right;color:var(--ink);font:700 16px/1.2 var(--display)}
 table.pantry tfoot tr.pdays input.pdn{width:4.6rem;display:inline-block;padding:2px 5px;margin:0 3px;border:1px solid var(--line);border-radius:5px;background:var(--paper);font-size:13px;text-align:right}
+table.pantry tr.pgroup td{background:var(--paper);padding:6px 10px;font:700 11.5px/1.2 var(--display);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+table.pantry tr.pgroup.water td{color:#1E88E5}
+table.pantry tfoot tr.pwater td{background:color-mix(in srgb,#3DA5FF 8%,var(--sheet))}
 table.pantry tfoot tr.pdays .u,table.pantry tfoot tr.ptotrow .u{font:400 12px var(--body);color:var(--muted);margin-left:4px}
 table.pantry tfoot input::placeholder{color:var(--muted)}
 .pkey{display:inline-flex;gap:12px;font-size:12px;color:var(--muted)}
@@ -1590,7 +1593,11 @@ function renderPantry(){
       if(!b.classList.contains('armed')){ b.classList.add('armed'); b.textContent='Delete?'; setTimeout(()=>{ if(b.isConnected){ b.classList.remove('armed'); b.textContent='×'; } },3000); return; }
       onDel(); }},'×'); return b; };
   const rows=[];
-  shown.forEach(it=>{
+  const isWater=it=>/water/i.test(it.name||'')||/^water$/i.test((it.cat||'').trim());
+  const foodItems=shown.filter(it=>!isWater(it)), waterItems=shown.filter(isWater);
+  [...foodItems,...waterItems].forEach(it=>{
+    if(waterItems.length&&foodItems.length&&it===foodItems[0]) rows.push(h('tr',{class:'pgroup'},h('td',{colspan:'11',text:'Food'})));
+    if(waterItems.length&&it===waterItems[0]) rows.push(h('tr',{class:'pgroup water'},h('td',{colspan:'11',text:'Water'})));
     const multi=it.packs.length>1, open=multi&&P.open.has(it.id);
     const st=pantryStatus(it), tq=itemQty(it), tk=itemKcal(it);
     const toggle=()=>{ open?P.open.delete(it.id):P.open.add(it.id); render(); };
@@ -1659,8 +1666,8 @@ function renderPantry(){
     const kh=Number(String(D.k100||'').replace(',','.')); if(String(D.k100||'').trim()&&isFinite(kh)) pk.k100=kh; applyK100(it); if(typeof pk.k100!=='number') deriveK100(it,pk);
     P.draft={unit:D.unit||'',cat:D.cat||''}; S.focus='pantry-add'; commit();
   };
-  const kTot=shown.reduce((n,it)=>n+(itemKcal(it)||0),0);
-  const totRow=h('tr',{class:'ptotrow'},h('td',{colspan:'5',text:q?`Total for ${shown.length} shown item${shown.length===1?'':'s'}`:'Total in pantry'}),
+  const kTot=foodItems.reduce((n,it)=>n+(itemKcal(it)||0),0);
+  const totRow=h('tr',{class:'ptotrow'},h('td',{colspan:'5',text:q?`Total food for the items shown`:'Total food'}),
     h('td',{class:'n','aria-label':`Total calories: ${kTot}`},String(Math.round(kTot)),h('span',{class:'u',text:'kcal'})),h('td',{colspan:'5'}));
   const ST=S.state.settings, ppl=ST.pantryPeople>0?ST.pantryPeople:4, kpp=ST.pantryKcal>0?ST.pantryKcal:2000;
   const days=kTot/(ppl*kpp);
@@ -1669,6 +1676,18 @@ function renderPantry(){
     el.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); el.blur(); } }); return el; };
   const daysRow=h('tr',{class:'pdays'},h('td',{colspan:'5'},'Days of food for',pnum(ppl,'Number of people','pantryPeople','1'),'people at',pnum(kpp,'Calories per person per day','pantryKcal','50'),'kcal a day'),
     h('td',{class:'n','aria-label':`${days.toFixed(1)} days`},(Math.round(days*10)/10).toLocaleString(undefined,{maximumFractionDigits:1}),h('span',{class:'u',text:Math.round(days*10)/10===1?'day':'days'})),h('td',{colspan:'5'}));
+  const wL=waterItems.reduce((n,it)=>n+it.packs.reduce((m,p)=>m+(packBase(p.qty,it.unit)||0),0),0)/1000;
+  const lpp=ST.pantryWaterL>0?ST.pantryWaterL:2, wDays=wL/(ppl*lpp);
+  const fmt1=v=>(Math.round(v*10)/10).toLocaleString(undefined,{maximumFractionDigits:1});
+  const wpIn=h('input',{class:'pdn',type:'number',min:'1',step:'1',value:String(ppl),'aria-label':'Number of people','data-k':'pd:wPeople'});
+  wpIn.addEventListener('change',()=>{ const n=Math.round(Number(wpIn.value)); if(n>0){ ST.pantryPeople=n; commit(); } else wpIn.value=String(ppl); });
+  const wlIn=h('input',{class:'pdn',type:'number',min:'0.5',step:'0.5',value:String(lpp),'aria-label':'Litres of water per person per day','data-k':'pd:wL'});
+  wlIn.addEventListener('change',()=>{ const n=Math.round(Number(String(wlIn.value).replace(',','.'))*10)/10; if(n>0){ ST.pantryWaterL=n; commit(); } else wlIn.value=String(lpp); });
+  [wpIn,wlIn].forEach(el=>el.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); el.blur(); } }));
+  const waterTot=h('tr',{class:'ptotrow pwater'},h('td',{colspan:'5',title:'Items with “water” in the name or a Water category, counted in L, ml, cl or dl',text:q?'Total water for the items shown':'Total water'}),
+    h('td',{class:'n'},fmt1(wL),h('span',{class:'u',text:'L'})),h('td',{colspan:'5'}));
+  const waterDays=h('tr',{class:'pdays pwater'},h('td',{colspan:'5'},'Days of water for',wpIn,'people at',wlIn,'L a day'),
+    h('td',{class:'n'},fmt1(wDays),h('span',{class:'u',text:Math.round(wDays*10)/10===1?'day':'days'})),h('td',{colspan:'5'}));
   const cats=[...new Set(items.map(x=>x.cat).filter(Boolean))].sort(cmpStr);
   const units=[...new Set(PUNITS.concat(items.map(x=>x.unit).filter(Boolean)))];
   const table=h('table',{class:'pantry'},
@@ -1679,11 +1698,11 @@ function renderPantry(){
       addCell('qty',{type:'text',inputmode:'decimal',class:'num',placeholder:'0'}),
       addCell('unit',{type:'text',list:'punits',placeholder:'unit'}),addCell('k100',{type:'text',inputmode:'decimal',class:'num',placeholder:'per 100'}),addCell('kcal',{type:'text',inputmode:'decimal',class:'num',placeholder:'kcal'}),addCell('cat',{type:'text',list:'pcats',placeholder:'category'}),
       addCell('exp',{type:'text',placeholder:'dd-mm-yyyy','data-k':'paddexp',title:'Day-month-year, e.g. 05-11-2026, or mm-yyyy for month only'}),h('td',{}),addCell('notes',{type:'text',placeholder:'notes'}),
-      h('td',{},h('button',{class:'pill primary',style:'margin:3px 6px;padding:4px 10px',onclick:addItem},'Add'))),totRow,daysRow));
+      h('td',{},h('button',{class:'pill primary',style:'margin:3px 6px;padding:4px 10px',onclick:addItem},'Add'))),totRow,daysRow,waterTot,waterDays));
   wrap.append(h('div',{class:'pwrap'},table),
     h('datalist',{id:'punits'},units.map(u=>h('option',{value:u}))),
     h('datalist',{id:'pcats'},cats.map(c=>h('option',{value:c}))),
-    h('p',{class:'libcount',style:'margin-top:10px',text:'Items with several packs show the closest expiry date, the number of packs, and the total amount and calories across them; click ▸ or the pack count to see each pack. Use “+ pack” to add another pack with its own date, or type an existing item’s name in the bottom row to add a pack to it. Dates are day-month-year (05-11-2026); leave out the day for month-only dates (11-2026), which count as the end of that month. Fill in kcal per 100 g or 100 ml from the label, with the amount in g, kg, ml or L, and each pack’s kcal is calculated for you. Packs of the same item can each have their own kcal per 100.'}));
+    h('p',{class:'libcount',style:'margin-top:10px',text:'Items with several packs show the closest expiry date, the number of packs, and the total amount and calories across them; click ▸ or the pack count to see each pack. Use “+ pack” to add another pack with its own date, or type an existing item’s name in the bottom row to add a pack to it. Dates are day-month-year (05-11-2026); leave out the day for month-only dates (11-2026), which count as the end of that month. Fill in kcal per 100 g or 100 ml from the label, with the amount in g, kg, ml or L, and each pack’s kcal is calculated for you. Packs of the same item can each have their own kcal per 100. Anything with “water” in its name, or in a category called Water, is listed separately and counted in litres.'}));
   return wrap;
 }
 
