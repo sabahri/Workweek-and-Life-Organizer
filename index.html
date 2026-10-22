@@ -37,7 +37,7 @@ button,input,select{font:inherit;color:inherit}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 
 /* Header */
-.top{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:12px 24px;padding:20px 24px 14px;max-width:1540px;margin:0 auto}
+.top{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:center;gap:12px 24px;padding:20px 24px 14px;max-width:1800px;margin:0 auto}
 .top .tabs{justify-self:center}
 .top .weeknav{justify-self:end;flex-wrap:wrap;justify-content:flex-end}
 @media (max-width:900px){ .top{grid-template-columns:1fr} .top .brand,.top .weeknav{justify-self:center;justify-content:center} }
@@ -60,11 +60,18 @@ button.pill{border:1px solid var(--line);background:var(--sheet);font-weight:700
 button.pill.primary{background:var(--ink);color:var(--sheet);border-color:var(--ink)}
 button.icon:hover:not(:disabled),button.pill:hover{border-color:var(--muted)}
 
-main{max-width:1540px;margin:0 auto;padding:0 24px 56px}
+main{max-width:1800px;margin:0 auto;padding:0 24px 56px}
 
 /* Week */
 .weekscroll{overflow-x:auto;padding-bottom:8px}
-.week{display:grid;grid-template-columns:2.9rem minmax(6.5rem,.62fr) repeat(7,minmax(8.5rem,1fr));min-width:1100px}
+.week{display:grid;grid-template-columns:2.9rem repeat(7,minmax(8.5rem,1fr));min-width:1000px}
+/* This-week row */
+.wklabel{grid-column:1;background:var(--ink);color:var(--sheet);border-radius:10px;font:700 12px/1.1 var(--display);
+  display:flex;align-items:center;justify-content:center;text-align:center;padding:6px 2px;margin-bottom:14px}
+.wkrow{grid-column:2/-1;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(9rem,1fr);gap:8px;margin:0 0 14px 6px}
+.wkrow .cell.wkcol{margin-top:0;border:1px solid var(--line);border-top:3px solid var(--c);border-radius:8px;min-height:5.5rem;background:var(--sheet)}
+.wkthm{font:700 12px/1.2 var(--display);color:color-mix(in srgb,var(--c) 70%,var(--ink));padding:2px 5px 3px}
+.wkrow .task{font-size:13.5px}
 .dayhead{padding:8px 10px 6px;display:flex;align-items:baseline;gap:6px;color:var(--muted);font-size:13px;border-radius:8px 8px 0 0}
 .dayhead .dnum{font:500 21px/1 var(--display);color:var(--ink)}
 .dayhead.today{background:var(--hi)}
@@ -198,6 +205,27 @@ body.resizing{cursor:col-resize;user-select:none}
 .chip[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink);font-weight:700}
 .chip i{width:9px;height:9px;border-radius:50%;background:var(--c)}
 .goals{display:grid;grid-template-columns:1fr;gap:22px;align-items:start}
+.projwrap{display:grid;grid-template-columns:15.5rem minmax(0,1fr);gap:26px;align-items:start}
+.ptoc .pitem{display:flex;align-items:center;gap:7px;width:100%;border:0;background:none;text-align:left;cursor:pointer;color:var(--ink);border-radius:6px;padding:6px 7px;font:700 14px/1.25 var(--display)}
+.ptoc .pitem:hover{background:var(--sheet)}
+.ptoc .pitem i{width:9px;height:9px;border-radius:50%;background:var(--c);flex:none}
+.ptoc .pitem .pt{margin-left:0!important;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ptoc .pitem .pn{color:var(--muted);font:400 12px/1 var(--body);font-variant-numeric:tabular-nums}
+.ptoc .pitem.on{background:var(--sheet);box-shadow:inset 3px 0 0 var(--c)}
+.ptoc .pitem:not(.on) .pt{color:var(--muted)}
+.ptoc li.gdrop-before .pitem{box-shadow:inset 0 2px 0 var(--focus)}
+.ptoc li.gdrop-after .pitem{box-shadow:inset 0 -2px 0 var(--focus)}
+.ptoc .pacts{display:flex;gap:10px;margin-top:10px;padding-top:8px;border-top:1px solid var(--line)}
+.ptoc .pdone{margin-top:14px;font-size:12px;color:var(--muted)}
+.pcollapse{border:1px solid var(--line);background:var(--sheet);color:var(--muted);cursor:pointer;font-size:12px;font-weight:700;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.pcollapse:hover{color:var(--ink);border-color:var(--ink)}
+.pempty{color:var(--muted);border:1.5px dashed var(--line);border-radius:10px;padding:28px 22px;max-width:46rem}
+@media (max-width:900px){
+  .projwrap{grid-template-columns:1fr;gap:8px}
+  .ptoc{position:static;max-height:none;overflow:visible;border-bottom:1px solid var(--line);padding-bottom:10px}
+  .ptoc ul{display:flex;flex-wrap:wrap;gap:6px}
+  .ptoc .pitem{border:1px solid var(--line);border-radius:999px;padding:4px 11px;font-size:13px;width:auto}
+}
 .ghead{display:flex;align-items:center;gap:6px}
 .ghandle{cursor:grab;color:var(--muted);font-size:17px;line-height:1;padding:2px 3px;border-radius:4px;user-select:none}
 .ghandle:hover{color:var(--ink);background:var(--paper)}
@@ -247,6 +275,11 @@ body.resizing{cursor:col-resize;user-select:none}
 .subfoot{display:flex;justify-content:flex-end;margin-top:6px}
 .addsub{flex:0 0 11rem;align-self:stretch;min-height:7rem;border:1.5px dashed var(--line);border-radius:8px;background:none;color:var(--muted);font-weight:700;font-size:14px;cursor:pointer}
 .addsub:hover{border-color:var(--c);color:var(--ink)}
+.addsub{white-space:pre-line}
+.goal:not(.recipe) .subs{display:grid;grid-template-columns:repeat(auto-fill,minmax(15.5rem,1fr));overflow-x:visible;align-items:start}
+.goal:not(.recipe) .subs .sub{min-width:0}
+.goal:not(.recipe) .subs .addsub{align-self:stretch}
+.goal:not(.recipe) .sub .steps.capped{max-height:var(--sh);overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;padding-right:4px;border-bottom:1px solid var(--line);box-shadow:inset 0 -10px 8px -8px color-mix(in srgb,var(--ink) 18%,transparent)}
 .step input[type=checkbox]{accent-color:var(--c);width:16px;height:16px;margin:0;cursor:pointer}
 .step .x{opacity:.55}
 .sdate{font-size:12px;color:var(--muted);background:none;border:1px solid transparent;border-radius:6px;padding:2px 4px;max-width:9.5rem}
@@ -348,6 +381,14 @@ dialog::backdrop{background:rgb(20 25 34 / .45)}
 .book:hover{background:var(--sheet)}
 .book .bt{font-weight:700;font-size:14.5px;line-height:1.3;overflow-wrap:anywhere}
 .book .ba{grid-column:1;font-size:13px;color:var(--muted);line-height:1.3}
+.bv{display:inline-block;margin-left:7px;font-size:11px;font-weight:700;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:0 7px;vertical-align:1px;white-space:nowrap}
+.bkser{display:flex;gap:10px;align-items:end;flex-wrap:wrap}
+.bkser label:first-child input{width:6rem}
+.bkser label:last-child{flex:1;min-width:12rem}
+.mchips{display:flex;flex-wrap:wrap;gap:5px;margin-top:-4px}
+.mchip{display:inline-flex;align-items:center;gap:4px;font-size:12px;border:1px solid var(--line);border-radius:999px;padding:2px 4px 2px 9px;background:var(--paper)}
+.mchip button{border:0;background:none;color:var(--muted);cursor:pointer;font-size:14px;line-height:1;padding:0 3px}
+.addrow .av{width:5.5rem;flex:none}
 .book .bl{grid-row:1;grid-column:2;font-size:11px;font-weight:700;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:0 7px;white-space:nowrap}
 .book .bn{grid-column:1/-1;font-size:12px;color:var(--muted);font-style:italic;margin-top:1px}
 .bookrow{display:flex;align-items:stretch;border-radius:6px}
@@ -408,6 +449,11 @@ body.bookdrag .genre{min-height:2.4rem}
 .rtab tbody input:hover{border-color:var(--line)}
 .rtab input:focus{outline:none;border-color:var(--c);background:var(--sheet)}
 .rtab tfoot input{border:1px dashed var(--line);background:var(--sheet)}
+.addingbtn{border:0;background:none;color:var(--muted);font-size:12.5px;font-weight:700;cursor:pointer;padding:4px 4px;border-radius:5px}
+.addingbtn:hover{color:var(--ink);background:var(--sheet)}
+.rtabempty{margin-top:4px}
+.addacts{display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding:4px 1px 2px}
+button.pill.sm{font-size:12.5px;padding:3px 10px;border-radius:6px}
 .rtab tfoot tr.addr td{padding-top:5px}
 .rtab tr.stot td{font-weight:700;font-size:12px;padding:5px 5px 2px;border-top:1px solid var(--line);text-align:right;font-variant-numeric:tabular-nums}
 .rtab tr.stot td:first-child{text-align:left;color:var(--muted)}
@@ -424,9 +470,44 @@ body.bookdrag .genre{min-height:2.4rem}
 .rhint{font-size:11.5px;color:var(--muted);margin-top:6px}
 .rcollapse{border:0;background:none;color:var(--muted);cursor:pointer;font-size:14px;padding:2px 4px;border-radius:4px}
 .rcollapse:hover{color:var(--ink)}
+.rtoc .ritem{display:flex;align-items:center;gap:6px;width:100%;border:0;background:none;text-align:left;cursor:pointer;color:var(--ink);border-radius:5px;padding:3px 7px;font:400 13px/1.3 var(--body)}
+.rtoc .ritem:hover{background:var(--sheet)}
+.rtoc .ritem .pt{margin-left:0!important;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:inherit;font-size:13px}
+.rtoc .rlist{margin:1px 0 8px 16px;border-left:2px solid color-mix(in srgb,var(--c) 45%,transparent)}
+.rtoc li.over>.pitem,.rtoc li.over>.ritem{outline:2px dashed var(--c,var(--focus));outline-offset:-2px}
+.rtoc li.gdrop-before>.ritem{box-shadow:inset 0 2px 0 var(--focus)}
+.rtoc li.gdrop-after>.ritem{box-shadow:inset 0 -2px 0 var(--focus)}
+.rtoc .pitem.on .pt{color:var(--ink)}
+.rce{padding:8px 0;border-bottom:1px solid var(--line)}
+.rce .rcerow{display:flex;gap:4px;align-items:center}
+.rce input.nm{flex:1;min-width:0;font:700 13px/1.2 var(--body);padding:4px 6px;border:1px solid var(--line);border-left:5px solid var(--c);border-radius:5px;background:var(--sheet)}
+.rce .dots{display:flex;flex-wrap:wrap;gap:3px;margin-top:6px}
+.rce .dots button{width:14px;height:14px;border-radius:50%;padding:0;border:2px solid var(--sheet);background:var(--sw);box-shadow:0 0 0 1px var(--line);cursor:pointer}
+.rce .dots button[aria-pressed="true"]{box-shadow:0 0 0 2px var(--ink)}
+.rcathd{display:flex;align-items:center;gap:9px;font:700 19px/1.2 var(--display);margin:6px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--c)}
+.rcathd i{width:12px;height:12px;border-radius:50%;background:var(--c)}
+.rcathd span{font:400 13px/1 var(--body);color:var(--muted)}
+.rcatblock+.rcatblock{margin-top:30px}
+.recipe{scroll-margin-top:1rem}
+.psteps{display:block;width:100%;margin-top:8px;font:inherit;font-size:13px;padding:6px 8px;border:1px dashed var(--line);border-radius:6px;background:var(--sheet);resize:vertical;min-height:2.6em;color:var(--ink)}
+.psteps:focus{outline:none;border-style:solid;border-color:var(--c)}
+@media (max-width:900px){ .rtoc .rlist{display:none} }
+.rcomp{margin-top:10px;border:1px solid var(--line);border-left:4px solid var(--cc);border-radius:7px;background:color-mix(in srgb,var(--cc) 7%,var(--sheet));padding:6px 8px 7px}
+.rcomp .rcomphd{display:flex;align-items:center;gap:3px}
+.rcomp .ctitle{flex:1;min-width:0;border:0;border-bottom:1px solid transparent;background:none;font:700 13.5px/1.25 var(--display);padding:1px 0;color:color-mix(in srgb,var(--cc) 60%,var(--ink))}
+.rcomp .ctitle:focus{outline:none;border-bottom-color:var(--cc)}
+.rcomp .ctitle::placeholder{color:var(--muted);font-weight:500}
+.rcomp .rtab input:focus{border-color:var(--cc)}
+.rcomp .psteps{min-height:2.2em}
+.rcomp .cbtn{border:0;background:none;color:var(--muted);cursor:pointer;font-size:13px;padding:0 3px;border-radius:4px;opacity:.7}
+.rcomp .cbtn:hover{opacity:1;color:var(--ink)}
+.rcomp .cbtn:disabled{visibility:hidden}
+.addcomp{display:block;width:100%;margin-top:10px;border:1.5px dashed var(--line);border-radius:7px;background:none;color:var(--muted);font-weight:700;font-size:13px;padding:7px;cursor:pointer}
+.addcomp:hover{border-color:var(--c);color:var(--ink)}
+.rtab tr.ptot td{border-top:2px solid var(--line);font-size:12.5px}
 /* Pantry */
 .pwrap{overflow-x:auto;padding-bottom:6px}
-table.pantry{width:100%;min-width:820px;border-collapse:separate;border-spacing:0;background:var(--sheet);border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:14px}
+table.pantry{width:100%;min-width:1000px;border-collapse:separate;border-spacing:0;background:var(--sheet);border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:14px}
 table.pantry th{text-align:left;font-size:12px;color:var(--muted);background:var(--paper);border-bottom:1px solid var(--line);padding:0;font-weight:700;white-space:nowrap}
 table.pantry th>span,table.pantry th>button{display:block;padding:9px 10px}
 table.pantry th>button{border:0;background:none;width:100%;text-align:left;font:inherit;color:inherit;cursor:pointer}
@@ -440,6 +521,35 @@ table.pantry input.num{text-align:right;font-variant-numeric:tabular-nums}
 table.pantry tr.expired td{background:color-mix(in srgb,var(--miss) 11%,var(--sheet))}
 table.pantry tr.soon td{background:color-mix(in srgb,var(--rd) 16%,var(--sheet))}
 table.pantry tr.empty td{color:var(--muted)}
+.pname{display:flex;align-items:center}
+.ptog{border:0;background:none;color:var(--muted);cursor:pointer;font-size:13px;padding:0 0 0 8px;width:22px;flex:none}
+.ptog:hover{color:var(--ink)}
+.ptogsp{width:22px;flex:none}
+.pname input{padding-left:4px!important}
+td.pcount{text-align:center;font-variant-numeric:tabular-nums;font-size:13px;color:var(--muted)}
+.pcbtn{border:1px solid var(--line);background:var(--paper);border-radius:999px;font-size:12px;font-weight:700;padding:1px 9px;cursor:pointer;color:var(--ink)}
+.pcbtn:hover{border-color:var(--ink)}
+td.pro{padding:0 10px;font-size:14px;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+td.pro.num{text-align:right}
+.pfirst{color:var(--muted);font-size:12px}
+table.pantry input.pexp{font-variant-numeric:tabular-nums}
+table.pantry input.bad{outline:2px solid var(--danger);outline-offset:-2px}
+table.pantry input::placeholder{color:var(--line)}
+.ptotal{border:0;background:none;width:100%;text-align:right;font:inherit;color:var(--ink);cursor:pointer;padding:8px 0;font-variant-numeric:tabular-nums}
+.ptotal:hover{color:var(--focus)}
+.ptedit{margin-left:6px;font-size:12px;color:var(--muted);opacity:0}
+.ptotal:hover .ptedit,.ptotal:focus-visible .ptedit{opacity:1}
+table.pantry input.num::placeholder{color:var(--line);font-size:12px}
+table.pantry tr.packrow td{background:color-mix(in srgb,var(--paper) 45%,var(--sheet));font-size:13px}
+table.pantry tr.packrow.expired td{background:color-mix(in srgb,var(--miss) 8%,var(--paper))}
+table.pantry tr.packrow.soon td{background:color-mix(in srgb,var(--rd) 12%,var(--paper))}
+table.pantry tr.packrow input{font-size:13px;padding:6px 10px}
+td.pklabel{padding-left:34px!important;font-size:12px;color:var(--muted);white-space:nowrap}
+td.pacts2{white-space:nowrap;text-align:right}
+.paddpk{border:0;background:none;color:var(--muted);font-size:12px;font-weight:700;cursor:pointer;padding:3px 6px;border-radius:4px;opacity:0}
+tr.pitemrow:hover .paddpk,.paddpk:focus-visible{opacity:1}
+@media (hover:none){.paddpk{opacity:.7}}
+.paddpk:hover{color:var(--ink);background:var(--paper)}
 .pstat{padding:0 10px;font-size:12px;white-space:nowrap;color:var(--muted)}
 tr.expired .pstat{color:var(--miss);font-weight:700}
 tr.soon .pstat{color:var(--ink);font-weight:700}
@@ -448,6 +558,9 @@ tr.soon .pstat{color:var(--ink);font-weight:700}
 .pdel.armed{font-size:12px;font-weight:700}
 table.pantry tfoot td{background:var(--paper);border-top:2px solid var(--line);border-bottom:0}
 table.pantry tfoot input{background:var(--sheet)}
+table.pantry tfoot tr.ptotrow td{background:var(--sheet);border-top:1px solid var(--line);padding:9px 10px;font-weight:700;font-variant-numeric:tabular-nums}
+table.pantry tfoot tr.ptotrow td.n{text-align:right;font:700 16px/1.2 var(--display)}
+table.pantry tfoot tr.ptotrow .u{font:400 12px var(--body);color:var(--muted);margin-left:4px}
 table.pantry tfoot input::placeholder{color:var(--muted)}
 .pkey{display:inline-flex;gap:12px;font-size:12px;color:var(--muted)}
 .pkey i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:4px;vertical-align:-1px}
@@ -512,7 +625,7 @@ table.pantry tfoot input::placeholder{color:var(--muted)}
   </div>
   <div class="tabs" role="tablist" aria-label="Views">
     <button role="tab" id="tab-week" aria-selected="true">Week</button>
-    <button role="tab" id="tab-goals" aria-selected="false">Goals</button>
+    <button role="tab" id="tab-goals" aria-selected="false">Projects</button>
     <button role="tab" id="tab-library" aria-selected="false">Library</button>
     <button role="tab" id="tab-recipes" aria-selected="false">Recipes</button>
     <button role="tab" id="tab-pantry" aria-selected="false">Pantry</button>
@@ -593,6 +706,11 @@ table.pantry tfoot input::placeholder{color:var(--muted)}
       <label>New subgenre<input id="bkNewGenre" type="text" placeholder="e.g. Geology"></label>
       <label>Under<select id="bkNewGroup"></select></label>
     </div>
+    <div class="bkser">
+      <label>Books in series<input id="bkVols" type="number" min="1" step="1" placeholder="1"></label>
+      <label>Combine with another entry<select id="bkMerge"></select></label>
+    </div>
+    <div id="bkMerged" class="mchips" aria-live="polite"></div>
     <label>Language<input id="bkLang" type="text" list="bkLangs" placeholder="English if blank"></label>
     <datalist id="bkLangs"></datalist>
     <label>Notes<input id="bkNotes" type="text" placeholder="Edition, where it is, lent to…"></label>
@@ -607,6 +725,7 @@ table.pantry tfoot input::placeholder{color:var(--muted)}
 <script>
 (function(){
 "use strict";
+const RCAT_SEED=[['Breakfast','#B07A1E'],['Main','#2F5D8A'],['Side','#3F7A55'],['Dessert','#BE185D'],['Snack','#C2410C'],['Drink','#2E7C82']];
 const EVT=[{id:'birthday',name:'Birthday',color:'#B07A1E'},{id:'conference',name:'Conference',color:'#2E7C82'},
   {id:'holiday',name:'Holiday or trip',color:'#3F7A55'},{id:'other',name:'Other',color:'#6B6F78'}];
 const LIB_SEED={"genres": ["Chemistry", "Spectroscopy & Magnetic Resonance", "Physics", "Astronomy & Space", "Mathematics & Logic", "Computing & Machine Learning", "Biology, Biochemistry & Medicine", "Oceans, Climate & Environment", "Popular Science", "History & Society", "Biography & Memoir", "Economics & Business", "Psychology & Self-Improvement", "Parenting", "Religion & Philosophy", "Classics & Poetry", "Fiction", "Comics", "Languages & Dictionaries", "Art, Colour & Design", "Photography", "Writing & Storytelling", "Crafts, Sewing & Fashion", "Electronics & Making", "Food, Baking & Brewing", "Gardening", "Travel & Guides"], "books": []};
@@ -665,8 +784,16 @@ function normalize(s){
   if(!Array.isArray(s.events)) s.events=[];
   if(!s.water||typeof s.water!=='object') s.water={};
   if(!Array.isArray(s.pantry)) s.pantry=[];
+  s.pantry.forEach(it=>{ if(!Array.isArray(it.packs)){ const pk={id:uid()}; if(typeof it.qty==='number') pk.qty=it.qty; if(it.exp) pk.exp=it.exp; it.packs=[pk]; } delete it.qty; delete it.exp; if(typeof it.kcal==='number'){ it.packs.forEach(p=>{ if(typeof p.kcal!=='number') p.kcal=it.kcal; }); } delete it.kcal; });
   if(!Array.isArray(s.recipes)) s.recipes=[];
-  s.recipes.forEach(r=>{ if(!Array.isArray(r.sections)||!r.sections.length) r.sections=[{id:uid(),title:'Ingredients',items:[]}]; r.sections.forEach(x=>{ if(!Array.isArray(x.items)) x.items=[]; }); if(!(r.servings>0)) r.servings=1; });
+  s.recipes.forEach(r=>{ if(!Array.isArray(r.sections)||!r.sections.length) r.sections=[{id:uid(),title:'Ingredients',items:[]}]; r.sections.forEach(x=>{ if(!Array.isArray(x.items)) x.items=[]; if(!Array.isArray(x.comps)) x.comps=[]; x.comps.forEach(c=>{ if(!Array.isArray(c.items)) c.items=[]; }); }); if(!(r.servings>0)) r.servings=1; });
+  if(!Array.isArray(s.recipeCats)) s.recipeCats=RCAT_SEED.map(([name,color])=>({id:uid(),name,color}));
+  s.recipes.forEach(r=>{
+    if(r.cat&&!r.catId){ const nm=String(r.cat).trim(); let c=s.recipeCats.find(x=>x.name.toLowerCase()===nm.toLowerCase());
+      if(!c){ c={id:uid(),name:nm,color:SW[(s.recipeCats.length*3)%SW.length]}; s.recipeCats.push(c); } r.catId=c.id; }
+    delete r.cat;
+    if(r.catId&&!s.recipeCats.some(c=>c.id===r.catId)) delete r.catId;
+  });
   if(!s.ingDB||typeof s.ingDB!=='object') s.ingDB={};
   if(!Array.isArray(s.books)){ s.books=LIB_SEED.books.map(b=>{ const o={id:uid(),title:b[0],author:b[1],genre:b[2]}; if(b[3]) o.lang=b[3]; return o; }); }
   if(!Array.isArray(s.genreGroups)){
@@ -797,7 +924,7 @@ $('importFile').addEventListener('change',async e=>{
   pendingImport=normalize(st);
   const when=obj.exported?new Date(obj.exported).toLocaleString('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'}):'an unknown date';
   const n=pendingImport.tasks.length, g=pendingImport.goals.length, ev=pendingImport.events.length;
-  $('impText').textContent=`This backup is from ${when} and has ${n} task${n===1?'':'s'}, ${g} goal${g===1?'':'s'} and ${ev} all-day event${ev===1?'':'s'}. It replaces everything currently in your planner, so export a backup first if you want to keep what’s here.`;
+  $('impText').textContent=`This backup is from ${when} and has ${n} task${n===1?'':'s'}, ${g} project${g===1?'':'s'} and ${ev} all-day event${ev===1?'':'s'}. It replaces everything currently in your planner, so export a backup first if you want to keep what’s here.`;
   impDlg.showModal(); $('impCancel').focus();
 });
 $('impCancel').addEventListener('click',()=>impDlg.close());
@@ -865,10 +992,10 @@ function editHandlers(ed){
 }
 
 /* ---------- week view ---------- */
-const COLS_DEFAULT=[.62,1,1,1,1,1,1,1];
-function colWeights(){ const c=S.state.settings.cols; return (Array.isArray(c)&&c.length===8&&c.every(x=>typeof x==='number'&&x>0))?c:COLS_DEFAULT; }
+const COLS_DEFAULT=[1,1,1,1,1,1,1];
+function colWeights(){ let c=S.state.settings.cols; if(Array.isArray(c)&&c.length===8) c=c.slice(1); return (Array.isArray(c)&&c.length===7&&c.every(x=>typeof x==='number'&&x>0))?c:COLS_DEFAULT; }
 function colTemplate(w=colWeights()){ return `2.9rem ${w.map(x=>`minmax(4.5rem,${x}fr)`).join(' ')}`; }
-function setGripHeight(){ const g=main.querySelector('.week'); if(g) g.style.setProperty('--gh',g.offsetHeight+'px'); }
+function setGripHeight(){ const g=main.querySelector('.week'); if(!g) return; const hd=g.querySelector('.dayhead'); g.style.setProperty('--gh',(g.getBoundingClientRect().bottom-(hd?hd.getBoundingClientRect().top:g.getBoundingClientRect().top))+'px'); }
 window.addEventListener('resize',setGripHeight);
 function startResize(e,i,grid,hdrs){
   if(e.button!==0) return;
@@ -994,10 +1121,11 @@ function spendCell(res,cls,label,extraLine){
 }
 function renderSpendRow(grid,days,today){
   const wk=key(S.week), dayKeys=days.map(key);
-  grid.append(h('div',{class:'spine spendspine',style:'--c:#475569;--on:#fff',title:'Daily spending totals across all themes'},'Spent'));
   const week=spendIn(x=>(x.date&&dayKeys.includes(x.date))||(!x.date&&x.week===wk));
   const undated=spendIn(x=>!x.date&&x.week===wk);
-  grid.append(spendCell(week,' wkcol','this week',h('div',{class:'sline'},h('span',{text:undated.total?`incl. ${money(undated.total)} any day`:'Week total'}))));
+  grid.append(h('div',{class:'spine spendspine',style:'--c:#475569;--on:#fff',
+    title:`Daily spending totals across all themes. Week total ${money(week.total)}${undated.total?`, incl. ${money(undated.total)} from This week tasks`:''}`},
+    week.total?`Spent · ${money(week.total)}`:'Spent'));
   days.forEach((d,i)=>{ const k=dayKeys[i]; grid.append(spendCell(spendIn(x=>x.date===k),(k===today?' today':'')+(i===6?' last':''),fmtLong.format(d))); });
 }
 /* ---------- recipes ---------- */
@@ -1057,31 +1185,108 @@ function parseIngLine(raw){
   return it;
 }
 function parseIngText(text){ return String(text||'').split(/\r?\n/).map(parseIngLine).filter(Boolean); }
-function newRecipe(){ const r={id:uid(),name:'',servings:1,cat:'',sections:[{id:uid(),title:'Ingredients',items:[]}],method:''};
+function newRecipe(){ const r={id:uid(),name:'',servings:1,sections:[{id:uid(),title:'Ingredients',items:[]}],method:''};
+  const sc=S.rec&&S.rec.cat; if(sc&&sc!=='all'&&S.state.recipeCats.some(c=>c.id===sc)) r.catId=sc;
   S.state.recipes.unshift(r); S.focus='rt:'+r.id; commit(); }
+const UNCAT={id:'',name:'Uncategorised',color:'#6B6F78'};
+const COMPC=['#E0A100','#2E7C82','#BE185D','#4D7C0F','#7E22CE','#C2410C','#1E6FB8','#8B5E3C'];
+const secItems=x=>[...x.items,...(x.comps||[]).flatMap(c=>c.items)];
+const rcatOf=r=>S.state.recipeCats.find(c=>c.id===r.catId)||null;
+function moveRecipe(src,target,aft){
+  const a=S.state.recipes; if(src===target) return;
+  if(target.catId) src.catId=target.catId; else delete src.catId;
+  a.splice(a.indexOf(src),1); a.splice(a.indexOf(target)+(aft?1:0),0,src); commit();
+}
 function renderRecipes(){
   const R=S.rec||(S.rec={q:'',cat:'all',closed:new Set()});
-  const all=S.state.recipes, q=R.q.trim().toLowerCase();
-  const cats=[...new Set(all.map(r=>r.cat).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
-  if(R.cat!=='all'&&!cats.includes(R.cat)) R.cat='all';
-  const vis=all.filter(r=>(R.cat==='all'||r.cat===R.cat)&&(!q||[r.name,r.cat,r.method,...r.sections.flatMap(x=>[x.title,...x.items.map(i=>i.name)])].some(x=>x&&String(x).toLowerCase().includes(q))));
+  const all=S.state.recipes, q=R.q.trim().toLowerCase(), C=S.state.recipeCats;
+  if(R.cat!=='all'&&R.cat!==''&&!C.some(c=>c.id===R.cat)) R.cat='all';
+  const match=r=>!q||[r.name,(rcatOf(r)||{}).name,r.method,...r.sections.flatMap(x=>[x.title,x.method,...(x.comps||[]).flatMap(c=>[c.title,c.method]),...secItems(x).map(i=>i.name)])].some(x=>x&&String(x).toLowerCase().includes(q));
+  const groups=[...C.map(c=>({c,list:all.filter(r=>r.catId===c.id)})),{c:UNCAT,list:all.filter(r=>!rcatOf(r))}];
+  const shown=groups.filter(g=>R.cat==='all'||g.c.id===R.cat).map(g=>({c:g.c,list:g.list.filter(match)}));
+  const vis=shown.flatMap(g=>g.list);
   const wrap=h('div');
-  const search=h('input',{class:'libsearch',type:'search',placeholder:'Search recipes and ingredients…','aria-label':'Search recipes','data-k':'rq',value:R.q});
+  const search=h('input',{class:'libsearch',type:'search',placeholder:'Search recipes, parts and ingredients…','aria-label':'Search recipes','data-k':'rq',value:R.q});
   search.addEventListener('input',()=>{ R.q=search.value; renderMain(); const el=document.querySelector('[data-k="rq"]'); if(el){el.focus();el.setSelectionRange(el.value.length,el.value.length);} });
-  const catSel=h('select',{'aria-label':'Filter by category',onchange:e=>{R.cat=e.target.value;render()}},h('option',{value:'all'},'All categories'),cats.map(c=>h('option',{value:c},c)));
-  catSel.value=R.cat;
-  wrap.append(h('div',{class:'libbar'},h('button',{class:'pill primary',onclick:newRecipe},'New recipe'),search,catSel,
-    all.length?h('button',{class:'link',onclick:()=>{ const allC=vis.every(r=>R.closed.has(r.id)); vis.forEach(r=>allC?R.closed.delete(r.id):R.closed.add(r.id)); render(); }},vis.length&&vis.every(r=>R.closed.has(r.id))?'Expand all':'Collapse all'):null,
+  wrap.append(h('div',{class:'libbar'},h('button',{class:'pill primary',onclick:newRecipe},'New recipe'),search,
+    vis.length?h('button',{class:'link',onclick:()=>{ const allC=vis.every(r=>R.closed.has(r.id)); vis.forEach(r=>allC?R.closed.delete(r.id):R.closed.add(r.id)); render(); }},vis.every(r=>R.closed.has(r.id))?'Expand all':'Collapse all'):null,
     h('span',{class:'libcount',text:(q||R.cat!=='all')?`${vis.length} of ${all.length} recipes`:`${all.length} recipe${all.length===1?'':'s'}`})));
-  if(!all.length){ wrap.append(h('p',{class:'empty',text:'No recipes yet. Add one, list its ingredients with their calories, carbs and protein, and the totals add up for you. Ingredients you’ve used before fill in automatically.'})); return wrap; }
-  if(!vis.length){ wrap.append(h('p',{class:'empty',text:'No recipes match.'})); return wrap; }
-  wrap.append(h('div',{class:'goals'},vis.map((r,i)=>recipeCard(r,i,vis,cats))));
-  wrap.append(h('datalist',{id:'runits'},RUNITS.map(u=>h('option',{value:u}))),h('datalist',{id:'rcats'},cats.map(c=>h('option',{value:c}))));
+  const goTo=r=>{ if(R.cat!=='all'&&R.cat!==(r.catId||'')) R.cat='all'; R.closed.delete(r.id); render();
+    setTimeout(()=>{ const el=document.getElementById('rc-'+r.id); if(el){ const rm=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches; el.scrollIntoView({behavior:rm?'auto':'smooth',block:'start'}); } },0); };
+  const dropOn=(li,onDrop)=>{
+    li.addEventListener('dragover',e=>{ if(!e.dataTransfer.types.includes('application/x-recipe')) return; e.preventDefault(); e.stopPropagation(); li.classList.add('over'); });
+    li.addEventListener('dragleave',e=>{ if(!li.contains(e.relatedTarget)) li.classList.remove('over'); });
+    li.addEventListener('drop',e=>{ const id=e.dataTransfer.getData('application/x-recipe'); if(!id) return; e.preventDefault(); e.stopPropagation(); li.classList.remove('over'); const src=all.find(x=>x.id===id); if(src) onDrop(src,e); });
+  };
+  // sidebar
+  const toc=h('aside',{class:'toc ptoc rtoc','aria-label':'Recipe categories'},
+    h('div',{class:'tochd'},h('b',{text:'Categories'}),h('button',{class:'link',style:'width:auto;padding:0','data-k':'rce',onclick:()=>{R.editCats=!R.editCats;S.confirm=null;render()}},R.editCats?'Done':'Edit')));
+  if(R.editCats){
+    C.forEach((c,ci)=>{
+      const nm=h('input',{class:'nm',type:'text',value:c.name,style:`--c:${c.color}`,'aria-label':'Category name','data-k':'rcn:'+c.id,'data-autofocus':S.focus==='rcn:'+c.id?'1':null});
+      nm.addEventListener('change',()=>{ const v=nm.value.trim(); if(v){ c.name=v; commit(); } else nm.value=c.name; });
+      nm.addEventListener('keydown',e=>{ if(e.key==='Enter') nm.blur(); });
+      const mv=d=>{ const j=ci+d; if(j<0||j>=C.length) return; [C[ci],C[j]]=[C[j],C[ci]]; commit(); };
+      const n=all.filter(r=>r.catId===c.id).length;
+      const del=S.confirm==='rcd:'+c.id
+        ? h('button',{class:'link danger','data-k':'rcd:'+c.id,title:n?'Its recipes become uncategorised':'',onclick:()=>{ S.state.recipeCats=C.filter(x=>x!==c); all.forEach(r=>{ if(r.catId===c.id) delete r.catId; }); S.confirm=null; commit(); }},'Delete?')
+        : h('button',{class:'x',style:'opacity:.6','aria-label':`Delete ${c.name}`,title:'Delete category','data-k':'rcd:'+c.id,onclick:()=>{S.confirm='rcd:'+c.id;render()}},'×');
+      toc.append(h('div',{class:'rce'},
+        h('div',{class:'rcerow'},nm,
+          h('button',{class:'gmove','aria-label':`Move ${c.name} up`,disabled:ci===0,onclick:()=>mv(-1)},'↑'),
+          h('button',{class:'gmove','aria-label':`Move ${c.name} down`,disabled:ci===C.length-1,onclick:()=>mv(1)},'↓'),del),
+        h('div',{class:'dots',role:'group','aria-label':`Colour for ${c.name}`},
+          SW.map((col,k)=>h('button',{style:`--sw:${col}`,'aria-label':`Colour ${k+1}`,'aria-pressed':String(c.color.toLowerCase()===col.toLowerCase()),onclick:()=>{c.color=col;commit()}})),
+          colourPick(c.color,SW,`Custom colour for ${c.name}`,'rcc:'+c.id,v=>{c.color=v}))));
+    });
+    toc.append(h('button',{class:'pill',style:'margin-top:10px;width:auto',onclick:()=>{ const c={id:uid(),name:'New category',color:SW[(C.length*3)%SW.length]}; C.push(c); S.focus='rcn:'+c.id; commit(); }},'+ Add category'));
+  } else {
+    const ul=h('ul',{});
+    ul.append(h('li',{},h('button',{class:'pitem'+(R.cat==='all'?' on':''),style:'--c:var(--ink)',onclick:()=>{R.cat='all';render()}},h('i'),h('span',{class:'pt',text:'All recipes'}),h('span',{class:'pn',text:String(all.length)}))));
+    groups.forEach(g=>{
+      if(g.c===UNCAT&&!g.list.length) return;
+      const li=h('li',{style:`--c:${g.c.color}`});
+      li.append(h('button',{class:'pitem'+(R.cat===g.c.id?' on':''),'data-k':'rcf:'+g.c.id,title:'Show only this category. Drop a recipe here to move it.',
+        onclick:()=>{ R.cat=R.cat===g.c.id?'all':g.c.id; render(); }},h('i'),h('span',{class:'pt',text:g.c.name}),h('span',{class:'pn',text:String(g.list.length)})));
+      dropOn(li,src=>{ if(g.c.id) src.catId=g.c.id; else delete src.catId; const a=S.state.recipes; a.splice(a.indexOf(src),1); const last=g.list.filter(x=>x!==src).slice(-1)[0]; a.splice(last?a.indexOf(last)+1:a.length,0,src); commit(); });
+      const items=g.list.filter(match);
+      if(items.length){
+        const sub=h('ul',{class:'rlist'});
+        items.forEach(r=>{
+          const ri=h('li',{});
+          const b=h('button',{class:'ritem',draggable:'true','data-k':'rci:'+r.id,title:'Click to go to this recipe. Drag to another category or position.',onclick:()=>goTo(r)},h('span',{class:'pt',text:r.name||'Untitled recipe'}));
+          b.addEventListener('dragstart',e=>{ e.dataTransfer.setData('application/x-recipe',r.id); e.dataTransfer.effectAllowed='move'; });
+          const aft=e=>{ const x=ri.getBoundingClientRect(); return e.clientY>x.top+x.height/2; };
+          ri.addEventListener('dragover',e=>{ if(!e.dataTransfer.types.includes('application/x-recipe')) return; e.preventDefault(); e.stopPropagation(); const x=aft(e); ri.classList.toggle('gdrop-after',x); ri.classList.toggle('gdrop-before',!x); });
+          ri.addEventListener('dragleave',e=>{ if(!ri.contains(e.relatedTarget)) ri.classList.remove('gdrop-before','gdrop-after'); });
+          ri.addEventListener('drop',e=>{ const id=e.dataTransfer.getData('application/x-recipe'); if(!id) return; e.preventDefault(); e.stopPropagation(); ri.classList.remove('gdrop-before','gdrop-after'); const src=all.find(x=>x.id===id); if(src) moveRecipe(src,r,aft(e)); });
+          ri.append(b); sub.append(ri);
+        });
+        li.append(sub);
+      }
+      ul.append(li);
+    });
+    toc.append(ul);
+  }
+  // main
+  const content=h('div',{});
+  if(!all.length) content.append(h('p',{class:'empty',text:'No recipes yet. Add one, split it into parts (for a cake: sponge, icing…), list each part’s ingredients with calories, carbs and protein, and the totals add up for you.'}));
+  else if(!vis.length) content.append(h('p',{class:'empty',text:q?'No recipes match.':'No recipes in this category yet. Use New recipe to add one here, or drag recipes onto it in the sidebar.'}));
+  else shown.forEach(g=>{
+    if(!g.list.length) return;
+    const blk=h('div',{class:'rcatblock',style:`--c:${g.c.color}`});
+    blk.append(h('h2',{class:'rcathd'},h('i'),g.c.name,h('span',{text:`${g.list.length} recipe${g.list.length===1?'':'s'}`})));
+    blk.append(h('div',{class:'goals'},g.list.map((r,i)=>recipeCard(r,i,g.list))));
+    content.append(blk);
+  });
+  wrap.append(h('div',{class:'projwrap'},toc,content));
+  wrap.append(h('datalist',{id:'runits'},RUNITS.map(u=>h('option',{value:u}))));
   return wrap;
 }
 function recipeCard(r,ri,vis){
   const R=S.rec, closed=R.closed.has(r.id);
-  const card=h('section',{class:'goal recipe',style:'--c:#B07A1E','aria-label':r.name||'Untitled recipe'});
+  const rc=rcatOf(r)||UNCAT;
+  const card=h('section',{class:'goal recipe',id:'rc-'+r.id,style:`--c:${rc.color}`,'aria-label':r.name||'Untitled recipe'});
   const title=h('input',{class:'gtitle',type:'text',value:r.name||'',placeholder:'Name this recipe','aria-label':'Recipe name','data-autofocus':S.focus==='rt:'+r.id?'1':null});
   title.addEventListener('input',()=>{r.name=title.value;save()});
   title.addEventListener('keydown',e=>{if(e.key==='Enter')title.blur()});
@@ -1089,7 +1294,7 @@ function recipeCard(r,ri,vis){
   handle.addEventListener('dragstart',e=>{ e.dataTransfer.setData('application/x-recipe',r.id); e.dataTransfer.effectAllowed='move'; try{e.dataTransfer.setDragImage(card,20,20)}catch(err){} card.classList.add('dragging'); });
   handle.addEventListener('dragend',()=>{ card.classList.remove('dragging'); document.querySelectorAll('.gdrop-before,.gdrop-after').forEach(x=>x.classList.remove('gdrop-before','gdrop-after')); });
   const after=e=>{ const b=card.getBoundingClientRect(); return e.clientY>b.top+b.height/2; };
-  const moveR=(src,target,aft)=>{ const a=S.state.recipes; if(src===target) return; a.splice(a.indexOf(src),1); a.splice(a.indexOf(target)+(aft?1:0),0,src); commit(); };
+  const moveR=(src,target,aft)=>moveRecipe(src,target,aft);
   card.addEventListener('dragover',e=>{ if(!e.dataTransfer.types.includes('application/x-recipe')) return; e.preventDefault(); const a=after(e); card.classList.toggle('gdrop-after',a); card.classList.toggle('gdrop-before',!a); });
   card.addEventListener('dragleave',e=>{ if(!card.contains(e.relatedTarget)) card.classList.remove('gdrop-before','gdrop-after'); });
   card.addEventListener('drop',e=>{ const id=e.dataTransfer.getData('application/x-recipe'); if(!id) return; e.preventDefault(); card.classList.remove('gdrop-before','gdrop-after');
@@ -1098,8 +1303,9 @@ function recipeCard(r,ri,vis){
     h('button',{class:'rcollapse','aria-expanded':String(!closed),'aria-label':closed?'Show ingredients':'Hide ingredients','data-k':'rc:'+r.id,onclick:()=>{ closed?R.closed.delete(r.id):R.closed.add(r.id); render(); }},closed?'▸':'▾'),
     title));
   const serv=h('input',{class:'rnum',type:'number',min:'1',step:'1',value:String(r.servings||1),'aria-label':'Servings','data-k':'rs:'+r.id});
-  const cat=h('input',{class:'rcat',type:'text',list:'rcats',value:r.cat||'',placeholder:'e.g. Dinner','aria-label':'Category','data-k':'rk:'+r.id});
-  cat.addEventListener('change',()=>{ const v=cat.value.trim(); if(v) r.cat=v; else delete r.cat; save(); });
+  const cat=h('select',{'aria-label':'Category','data-k':'rk:'+r.id,onchange:e=>{ if(e.target.value) r.catId=e.target.value; else delete r.catId; commit(); }},
+    S.state.recipeCats.map(c=>h('option',{value:c.id},c.name)),h('option',{value:''},'Uncategorised'));
+  cat.value=r.catId||'';
   const delBtn=S.confirm==='r:'+r.id
     ? h('button',{class:'link danger','data-k':'rd:'+r.id,onclick:()=>{S.state.recipes=S.state.recipes.filter(x=>x!==r);S.confirm=null;commit()}},'Confirm delete')
     : h('button',{class:'link','data-k':'rd:'+r.id,onclick:()=>{S.confirm='r:'+r.id;render()}},'Delete');
@@ -1107,7 +1313,7 @@ function recipeCard(r,ri,vis){
     h('button',{class:'gmove','aria-label':'Move recipe up',title:'Move up',disabled:ri===0,'data-k':'ru:'+r.id,onclick:()=>moveR(r,vis[ri-1],false)},'↑'),
     h('button',{class:'gmove','aria-label':'Move recipe down',title:'Move down',disabled:ri===vis.length-1,'data-k':'rdn:'+r.id,onclick:()=>moveR(r,vis[ri+1],true)},'↓'),
     h('span',{class:'spacer'}),
-    h('button',{class:'link',onclick:()=>{ const c=JSON.parse(JSON.stringify(r)); c.id=uid(); c.name=(r.name||'Recipe')+' (copy)'; c.sections.forEach(x=>{x.id=uid(); x.items.forEach(i=>i.id=uid())}); S.state.recipes.splice(S.state.recipes.indexOf(r)+1,0,c); commit(); }},'Duplicate'),
+    h('button',{class:'link',onclick:()=>{ const c=JSON.parse(JSON.stringify(r)); c.id=uid(); c.name=(r.name||'Recipe')+' (copy)'; c.sections.forEach(x=>{x.id=uid(); x.items.forEach(i=>i.id=uid()); (x.comps||[]).forEach(k=>{k.id=uid(); k.items.forEach(i=>i.id=uid())}); }); S.state.recipes.splice(S.state.recipes.indexOf(r)+1,0,c); commit(); }},'Duplicate'),
     delBtn));
   // totals
   const refs={};
@@ -1116,40 +1322,32 @@ function recipeCard(r,ri,vis){
   const totBox=h('div',{class:'rtot','aria-live':'polite'},grp('Total','t'),grp('Per serving','s'));
   card.append(totBox);
   const subRefs=[];
-  const refresh=()=>{ const items=r.sections.flatMap(x=>x.items); const t=recTotals(items); const sv=r.servings>0?r.servings:1;
+  const refresh=()=>{ const items=r.sections.flatMap(secItems); const t=recTotals(items); const sv=r.servings>0?r.servings:1;
     RF.forEach(f=>{ refs['t'+f].textContent=fmtNut(f,t[f]); refs['s'+f].textContent=fmtNut(f,t[f]/sv); });
-    subRefs.forEach(({sec,cells})=>{ const st=recTotals(sec.items); RF.forEach(f=>cells[f].textContent=fmtNut(f,st[f])); }); };
+    subRefs.forEach(({sec,cells})=>{ const st=recTotals(sec.items?secItems(sec):sec.list); RF.forEach(f=>cells[f].textContent=fmtNut(f,st[f])); }); };
   serv.addEventListener('change',()=>{ const v=Math.round(Number(serv.value)); if(v>0){ r.servings=v; save(); refresh(); } else serv.value=String(r.servings); });
   if(!closed){
     const row=h('div',{class:'subs'});
     r.sections.forEach((sec,si)=>row.append(recipeSection(r,sec,si,refresh,subRefs)));
-    row.append(h('button',{class:'addsub',onclick:()=>{ const x={id:uid(),title:'',items:[]}; r.sections.push(x); S.focus='rst:'+x.id; commit(); }},'+ Add section'));
+    row.append(h('button',{class:'addsub',onclick:()=>{ const x={id:uid(),title:'',items:[],comps:[]}; r.sections.push(x); S.focus='rst:'+x.id; commit(); }},'+ Add part\n(e.g. Idli, Sambar)'));
     card.append(row);
-    const m=h('textarea',{class:'rmethod',rows:'4',placeholder:'Method, notes, source…','aria-label':'Method and notes','data-k':'rm:'+r.id},r.method||'');
+    const m=h('textarea',{class:'rmethod',rows:'4',placeholder:'Assembly, overall method, notes, source…','aria-label':'Method and notes','data-k':'rm:'+r.id},r.method||'');
     m.addEventListener('input',()=>{ r.method=m.value; save(); });
     card.append(m);
   }
   refresh();
   return card;
 }
-function recipeSection(r,sec,si,refresh,subRefs){
-  const box=h('div',{class:'sub',role:'group','aria-label':sec.title||'Ingredients'});
-  const ti=h('input',{class:'subtitle',type:'text',value:sec.title||'',placeholder:'Section, e.g. Sauce','aria-label':'Section name','data-k':'rst:'+sec.id,'data-autofocus':S.focus==='rst:'+sec.id?'1':null});
-  ti.addEventListener('input',()=>{sec.title=ti.value;save()});
-  ti.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); S.focus='ra:'+sec.id; commit(); } });
-  const mv=d=>{ const j=si+d; if(j<0||j>=r.sections.length) return; [r.sections[si],r.sections[j]]=[r.sections[j],r.sections[si]]; commit(); };
-  box.append(h('div',{class:'subhd'},
-    h('button',{class:'submove','aria-label':'Move section left',title:'Move left',disabled:si===0,onclick:()=>mv(-1)},'‹'),ti,
-    h('button',{class:'submove','aria-label':'Move section right',title:'Move right',disabled:si===r.sections.length-1,onclick:()=>mv(1)},'›')));
+function ingTable(holder,refresh,cells){
   const colg=h('colgroup',{},h('col',{}),h('col',{style:'width:3.4rem'}),h('col',{style:'width:3.4rem'}),h('col',{style:'width:3.6rem'}),h('col',{style:'width:3.4rem'}),h('col',{style:'width:3.4rem'}),h('col',{style:'width:1.5rem'}));
   const head=h('thead',{},h('tr',{},h('th',{text:'Ingredient'}),h('th',{class:'n',text:'Amt'}),h('th',{text:'Unit'}),h('th',{class:'n',text:'kcal'}),h('th',{class:'n',text:'Carbs g'}),h('th',{class:'n',text:'Prot. g'}),h('th',{})));
   const body=h('tbody');
   const fieldIn=(it,f,attrs,onCh)=>{ const inp=h('input',Object.assign({value:it[f]==null?'':String(it[f])},attrs)); inp.addEventListener('change',()=>onCh(inp)); inp.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); inp.blur(); } }); return inp; };
-  sec.items.forEach((it,ii)=>{
+  holder.items.forEach((it,ii)=>{
     const ins={};
     const sync=()=>RF.forEach(f=>{ ins[f].value=it[f]==null?'':String(it[f]); });
     const onIdent=()=>{ if(ingApply(it)) sync(); else ingLearn(it); save(); refresh(); };
-    const tr=h('tr',{},
+    body.append(h('tr',{},
       h('td',{},fieldIn(it,'name',{type:'text','aria-label':'Ingredient','data-k':`ri:${it.id}:name`},inp=>{ const v=inp.value.trim(); if(!v){ inp.value=it.name; return; } it.name=v; onIdent(); })),
       h('td',{class:'n'},fieldIn(it,'amt',{type:'text',inputmode:'decimal','aria-label':`Amount of ${it.name}`,'data-k':`ri:${it.id}:amt`},inp=>{ const n=rnum(inp.value);
         if(Number.isNaN(n)){ inp.value=it.amt??''; return; }
@@ -1161,77 +1359,176 @@ function recipeSection(r,sec,si,refresh,subRefs){
       ...RF.map(f=>h('td',{class:'n'},(ins[f]=fieldIn(it,f,{type:'text',inputmode:'decimal','aria-label':`${f==='kcal'?'Calories':f==='carb'?'Carbs':'Protein'} for ${it.name}`,'data-k':`ri:${it.id}:${f}`},inp=>{
         const n=rnum(inp.value); if(Number.isNaN(n)){ inp.value=it[f]??''; return; }
         if(n===null) delete it[f]; else it[f]=rround(f,n); ingLearn(it,f); save(); refresh(); })))),
-      h('td',{},h('button',{class:'x','aria-label':`Remove ${it.name}`,title:'Remove ingredient',onclick:()=>{ sec.items.splice(ii,1); commit(); }},'×')));
-    body.append(tr);
+      h('td',{},h('button',{class:'x','aria-label':`Remove ${it.name}`,title:'Remove ingredient',onclick:()=>{ holder.items.splice(ii,1); commit(); }},'×'))));
   });
-  // add row
-  const D=(S.recDraft=S.recDraft||{})[sec.id]||(S.recDraft[sec.id]={});
-  const addIn=(f,attrs)=>{ const inp=h('input',Object.assign({value:D[f]||''},attrs)); inp.addEventListener('input',()=>{D[f]=inp.value}); inp.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); addIng(); } }); return inp; };
-  const addIng=()=>{ const name=(D.name||'').trim(); if(!name){ const f=box.querySelector('[data-k="ra:'+sec.id+'"]'); if(f) f.focus(); return; }
+  const D=(S.recDraft=S.recDraft||{})[holder.id]||(S.recDraft[holder.id]={});
+  const adding=S.ingAdd===holder.id;
+  const tbl=h('table',{class:'rtab'});
+  const openAdd=()=>{ S.ingAdd=holder.id; S.focus='ra:'+holder.id; render(); };
+  const closeAdd=()=>{ S.ingAdd=null; Object.keys(D).forEach(k=>delete D[k]); render(); };
+  const addBtn=h('button',{class:'addingbtn','data-k':'rab:'+holder.id,onclick:openAdd},'+ Add ingredient');
+  if(!holder.items.length&&!adding){
+    if(cells) RF.forEach(f=>{ cells[f]=h('span'); });
+    return h('div',{class:'rtabempty'},addBtn);
+  }
+  const addIn=(f,attrs)=>{ const inp=h('input',Object.assign({value:D[f]||''},attrs)); inp.addEventListener('input',()=>{D[f]=inp.value}); inp.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); addIng(); } else if(e.key==='Escape'){ e.preventDefault(); closeAdd(); } }); return inp; };
+  const addIng=(keepFocus=true)=>{ const name=(D.name||'').trim(); if(!name){ if(keepFocus){ const f=tbl.querySelector('[data-k="ra:'+holder.id+'"]'); if(f) f.focus(); } return; }
     const it={id:uid(),name}; const a=rnum(D.amt); if(typeof a==='number'&&!Number.isNaN(a)) it.amt=a; if((D.unit||'').trim()) it.unit=D.unit.trim();
     let typed=false; RF.forEach(f=>{ const n=rnum(D[f]); if(typeof n==='number'&&!Number.isNaN(n)){ it[f]=rround(f,n); typed=true; } });
     if(!typed) ingApply(it); ingLearn(it);
-    sec.items.push(it); S.recDraft[sec.id]={}; S.focus='ra:'+sec.id; commit(); };
-  const foot=h('tfoot',{},h('tr',{class:'addr'},
-    h('td',{},addIn('name',{type:'text',placeholder:'+ Ingredient','aria-label':'New ingredient','data-k':'ra:'+sec.id,'data-autofocus':S.focus==='ra:'+sec.id?'1':null})),
+    holder.items.push(it); Object.keys(D).forEach(k=>delete D[k]); if(keepFocus) S.focus='ra:'+holder.id; commit(); };
+  const foot=h('tfoot',{},adding?h('tr',{class:'addr'},
+    h('td',{},addIn('name',{type:'text',placeholder:'Ingredient','aria-label':'New ingredient','data-k':'ra:'+holder.id,'data-autofocus':S.focus==='ra:'+holder.id?'1':null})),
     h('td',{class:'n'},addIn('amt',{type:'text',inputmode:'decimal',placeholder:'amt','aria-label':'Amount'})),
     h('td',{},addIn('unit',{type:'text',list:'runits',placeholder:'unit','aria-label':'Unit'})),
     ...RF.map(f=>h('td',{class:'n'},addIn(f,{type:'text',inputmode:'decimal',placeholder:f==='kcal'?'kcal':'g','aria-label':f==='kcal'?'Calories':f==='carb'?'Carbs':'Protein'}))),
-    h('td',{})));
-  if(r.sections.length>1){ const cells={}; foot.append(h('tr',{class:'stot'},h('td',{colspan:'3',text:'Section total'}),...RF.map(f=>(cells[f]=h('td',{}))),h('td',{}))); subRefs.push({sec,cells}); }
-  box.append(h('table',{class:'rtab'},colg,head,body,foot));
+    h('td',{}))
+    :h('tr',{},h('td',{colspan:'7'},addBtn)));
+  if(adding){
+    const tr=foot.firstChild;
+    tr.addEventListener('focusout',e=>{ if(tr.contains(e.relatedTarget)||(e.relatedTarget&&e.relatedTarget.closest&&e.relatedTarget.closest('.addacts'))) return; setTimeout(()=>{ if(!tr.isConnected) return; if(S.ingAdd===holder.id&&(D.name||'').trim()&&!tr.contains(document.activeElement)) addIng(false); },0); });
+    foot.append(h('tr',{},h('td',{colspan:'7'},h('div',{class:'addacts'},
+      h('button',{class:'pill primary sm',onmousedown:e=>e.preventDefault(),onclick:()=>addIng(true)},'Add'),
+      h('button',{class:'pill sm',onmousedown:e=>e.preventDefault(),onclick:()=>{ if((D.name||'').trim()) addIng(false); S.ingAdd=null; render(); }},'Done'),
+      h('span',{class:'rhint',style:'margin:0',text:'Enter adds and keeps the row open for the next one'})))));
+  }
+  if(cells){ foot.append(h('tr',{class:'stot'},h('td',{colspan:'3',text:cells.label}),...RF.map(f=>(cells[f]=h('td',{}))),h('td',{}))); }
+  tbl.append(colg,head,body,foot);
+  return tbl;
+}
+function pasteBox(id,hint,onAdd){
+  const ta=h('textarea',{class:'rmethod',rows:'5',placeholder:hint,'aria-label':'Paste an ingredient list','data-autofocus':'1'},S.pasteDraft||'');
+  const prev=h('p',{class:'rhint','aria-live':'polite'});
+  const upd=()=>{ S.pasteDraft=ta.value; const items=parseIngText(ta.value); const nh=items.filter(x=>x.header).length, ni=items.length-nh;
+    prev.textContent=ni?`Will add ${ni} ingredient${ni>1?'s':''}${nh?`, with ${nh} new component${nh>1?'s':''}`:''}. You can fix anything afterwards.`:'Nothing recognised yet.'; };
+  ta.addEventListener('input',upd); upd();
+  const go=()=>{ const parsed=parseIngText(ta.value); if(!parsed.some(x=>!x.header)){ ta.focus(); return; } onAdd(parsed); S.pasteSec=null; S.pasteDraft=''; commit(); };
+  return [ta,prev,h('div',{class:'subfoot',style:'gap:8px'},
+    h('button',{class:'pill',onclick:()=>{S.pasteSec=null;S.pasteDraft='';render()}},'Cancel'),
+    h('button',{class:'pill primary',onclick:go},'Add ingredients'))];
+}
+function recipeSection(r,sec,si,refresh,subRefs){
+  const box=h('div',{class:'sub',role:'group','aria-label':sec.title||'Ingredients'});
+  const ti=h('input',{class:'subtitle',type:'text',value:sec.title||'',placeholder:'Part, e.g. Sambar','aria-label':'Part name','data-k':'rst:'+sec.id,'data-autofocus':S.focus==='rst:'+sec.id?'1':null});
+  ti.addEventListener('input',()=>{sec.title=ti.value;save()});
+  ti.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); S.ingAdd=sec.id; S.focus='ra:'+sec.id; commit(); } });
+  const mv=d=>{ const j=si+d; if(j<0||j>=r.sections.length) return; [r.sections[si],r.sections[j]]=[r.sections[j],r.sections[si]]; commit(); };
+  box.append(h('div',{class:'subhd'},
+    h('button',{class:'submove','aria-label':'Move part left',title:'Move left',disabled:si===0,onclick:()=>mv(-1)},'‹'),ti,
+    h('button',{class:'submove','aria-label':'Move part right',title:'Move right',disabled:si===r.sections.length-1,onclick:()=>mv(1)},'›')));
+  const comps=sec.comps||(sec.comps=[]);
+  // the part's own (main) ingredients
+  box.append(ingTable(sec,refresh,null));
+  const ps=h('textarea',{class:'psteps',rows:'2',placeholder:`Steps for ${sec.title||'this part'} (optional)`,'aria-label':`Steps for ${sec.title||'this part'}`,'data-k':'pst:'+sec.id},sec.method||'');
+  ps.addEventListener('input',()=>{ sec.method=ps.value; save(); });
+  box.append(ps);
+  // components, stacked
+  comps.forEach((c,ci)=>{
+    const col=c.color||COMPC[ci%COMPC.length];
+    const cb=h('div',{class:'rcomp',style:`--cc:${col}`,role:'group','aria-label':c.title||'Component'});
+    const ct=h('input',{class:'ctitle',type:'text',value:c.title||'',placeholder:'Component, e.g. Tamarind paste','aria-label':'Component name','data-k':'rct:'+c.id,'data-autofocus':S.focus==='rct:'+c.id?'1':null});
+    ct.addEventListener('input',()=>{c.title=ct.value;save()});
+    ct.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); S.ingAdd=c.id; S.focus='ra:'+c.id; commit(); } });
+    const cmv=d=>{ const j=ci+d; if(j<0||j>=comps.length) return; [comps[ci],comps[j]]=[comps[j],comps[ci]]; commit(); };
+    const del=S.confirm==='rcp:'+c.id
+      ? h('button',{class:'link danger',onclick:()=>{ sec.comps=comps.filter(x=>x!==c); S.confirm=null; commit(); }},c.items.length?'Delete?':'Delete')
+      : h('button',{class:'cbtn','aria-label':`Delete ${c.title||'component'}`,title:'Delete component',onclick:()=>{S.confirm='rcp:'+c.id;render()}},'×');
+    cb.append(h('div',{class:'rcomphd'},ct,
+      h('button',{class:'cbtn','aria-label':'Move component up',title:'Move up',disabled:ci===0,onclick:()=>cmv(-1)},'↑'),
+      h('button',{class:'cbtn','aria-label':'Move component down',title:'Move down',disabled:ci===comps.length-1,onclick:()=>cmv(1)},'↓'),del));
+    const cells={label:'Subtotal'}; subRefs.push({sec:{list:c.items},cells});
+    cb.append(ingTable(c,refresh,cells));
+    const cs=h('textarea',{class:'psteps',rows:'2',placeholder:`Steps for ${c.title||'this component'} (optional)`,'aria-label':`Steps for ${c.title||'this component'}`},c.method||'');
+    cs.addEventListener('input',()=>{ c.method=cs.value; save(); });
+    cb.append(cs);
+    if(S.pasteSec===c.id){
+      cb.append(...pasteBox(c.id,`Paste the ingredients for ${c.title||'this component'} here, one per line, e.g.\n30 g tamarind\n250 ml warm water`,parsed=>{
+        let target=c, at=comps.indexOf(c);
+        parsed.forEach(x=>{ if(x.header){ target={id:uid(),title:x.header,items:[]}; comps.splice(++at,0,target); return; } ingApply(x); target.items.push(x); });
+      }));
+    } else cb.append(h('div',{class:'subfoot',style:'justify-content:flex-start;margin-top:4px'},
+      h('button',{class:'link',onclick:()=>{S.pasteSec=c.id;S.pasteDraft='';render()}},`Paste ingredients into ${c.title||'this component'}`)));
+    box.append(cb);
+  });
+  box.append(h('button',{class:'addcomp',onclick:()=>{ const c={id:uid(),title:'',items:[]}; comps.push(c); S.focus='rct:'+c.id; commit(); }},'+ Add component (e.g. tamarind paste)'));
+  if(r.sections.length>1||comps.length){
+    const cells={label:`${sec.title||'Part'} total`}; subRefs.push({sec,cells});
+    box.append(h('table',{class:'rtab'},h('colgroup',{},h('col',{}),h('col',{style:'width:3.4rem'}),h('col',{style:'width:3.4rem'}),h('col',{style:'width:3.6rem'}),h('col',{style:'width:3.4rem'}),h('col',{style:'width:3.4rem'}),h('col',{style:'width:1.5rem'})),
+      h('tbody',{},h('tr',{class:'stot ptot'},h('td',{colspan:'3',text:cells.label}),...RF.map(f=>(cells[f]=h('td',{}))),h('td',{})))));
+  }
   if(S.pasteSec===sec.id){
-    const ta=h('textarea',{class:'rmethod',rows:'6',placeholder:'Paste the ingredient list here, one ingredient per line, e.g.\n200 g spaghetti\n2 tbsp olive oil\n3 cloves garlic\nFor the sauce:\n1 can chopped tomatoes',
+    const ta=h('textarea',{class:'rmethod',rows:'6',placeholder:'Paste the ingredient list here, one per line. Headings like "For the tamarind paste:" become components, e.g.\n2 cups toor dal\n1 tsp turmeric\nFor the tamarind paste:\n30 g tamarind\n250 ml warm water',
       'aria-label':'Paste an ingredient list','data-autofocus':'1'},S.pasteDraft||'');
     const prev=h('p',{class:'rhint','aria-live':'polite'});
     const upd=()=>{ S.pasteDraft=ta.value; const items=parseIngText(ta.value); const nh=items.filter(x=>x.header).length, ni=items.length-nh;
-      prev.textContent=ni?`Will add ${ni} ingredient${ni>1?'s':''}${nh?` in ${nh+(items[0]&&items[0].header?0:1)} sections`:''}. You can fix anything afterwards.`:'Nothing recognised yet.'; };
+      prev.textContent=ni?`Will add ${ni} ingredient${ni>1?'s':''}${nh?`, with ${nh} component${nh>1?'s':''}`:''}. You can fix anything afterwards.`:'Nothing recognised yet.'; };
     ta.addEventListener('input',upd); upd();
     const doAdd=()=>{
       const parsed=parseIngText(ta.value); if(!parsed.some(x=>!x.header)){ ta.focus(); return; }
-      let target=sec, idx=r.sections.indexOf(sec);
+      let target=sec;
       parsed.forEach(x=>{
-        if(x.header){ if(!target.items.length&&!target.title.trim()) target.title=x.header;
-          else if(!target.items.length&&target===sec&&target.title==='Ingredients') target.title=x.header;
-          else { target={id:uid(),title:x.header,items:[]}; r.sections.splice(++idx,0,target); } return; }
+        if(x.header){ target={id:uid(),title:x.header,items:[]}; comps.push(target); return; }
         ingApply(x); target.items.push(x);
       });
+      sec.comps=comps.filter(c=>c.items.length||c.title);
       S.pasteSec=null; S.pasteDraft=''; commit(); };
     box.append(ta,prev,h('div',{class:'subfoot',style:'gap:8px'},
       h('button',{class:'pill',onclick:()=>{S.pasteSec=null;S.pasteDraft='';render()}},'Cancel'),
       h('button',{class:'pill primary',onclick:doAdd},'Add ingredients')));
   }
-  box.append(h('p',{class:'rhint',text:'Enter adds the ingredient. Type its calories, carbs and protein for that amount once, and next time the same ingredient fills in and scales with the amount.'}));
+  box.append(h('p',{class:'rhint',text:'Enter adds the ingredient. Type its calories, carbs and protein once, and next time the same ingredient fills in and scales with the amount.'}));
+  const nAll=secItems(sec).length;
   box.append(h('div',{class:'subfoot',style:'justify-content:space-between'},
     S.pasteSec===sec.id?h('span'):h('button',{class:'link',onclick:()=>{S.pasteSec=sec.id;S.pasteDraft='';render()}},'Paste ingredient list'),
     S.confirm==='rs:'+sec.id
-    ? h('button',{class:'link danger',onclick:()=>{ r.sections=r.sections.filter(x=>x!==sec); if(!r.sections.length) r.sections.push({id:uid(),title:'Ingredients',items:[]}); S.confirm=null; commit(); }},sec.items.length?`Delete with ${sec.items.length} ingredient${sec.items.length>1?'s':''}`:'Confirm delete')
-    : h('button',{class:'link',onclick:()=>{S.confirm='rs:'+sec.id;render()}},'Delete section')));
+    ? h('button',{class:'link danger',onclick:()=>{ r.sections=r.sections.filter(x=>x!==sec); if(!r.sections.length) r.sections.push({id:uid(),title:'Ingredients',items:[],comps:[]}); S.confirm=null; commit(); }},nAll?`Delete with ${nAll} ingredient${nAll>1?'s':''}`:'Confirm delete')
+    : h('button',{class:'link',onclick:()=>{S.confirm='rs:'+sec.id;render()}},'Delete part')));
   return box;
 }
 
 /* ---------- pantry ---------- */
 const PUNITS=['pcs','g','kg','ml','L','cans','jars','packs','boxes','bottles','bags'];
-function pantryStatus(it){
-  if(!it.exp) return {cls:'',text:''};
-  const d=diffDays(key(new Date()),it.exp);
+const effExp=e=>{ if(!e) return ''; if(/^\d{4}-\d{2}$/.test(e)){ const [y,m]=e.split('-').map(Number); return `${e}-${pad(new Date(y,m,0).getDate())}`; } return e; };
+function parseExp(str){
+  const t=String(str||'').trim(); if(!t) return '';
+  let m;
+  const yr=y=>{ y=Number(y); return y<100?2000+y:y; };
+  const ok=(y,mo,d)=>mo>=1&&mo<=12&&y>=1900&&y<=2200&&(d==null||(d>=1&&d<=new Date(y,mo,0).getDate()));
+  if((m=t.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/))){ const y=+m[1],mo=+m[2],d=+m[3]; return ok(y,mo,d)?`${y}-${pad(mo)}-${pad(d)}`:null; }
+  if((m=t.match(/^(\d{4})-(\d{1,2})$/))){ const y=+m[1],mo=+m[2]; return ok(y,mo)?`${y}-${pad(mo)}`:null; }
+  if((m=t.match(/^(\d{1,2})[\s.\/-](\d{1,2})[\s.\/-](\d{2}|\d{4})$/))){ const d=+m[1],mo=+m[2],y=yr(m[3]); return ok(y,mo,d)?`${y}-${pad(mo)}-${pad(d)}`:null; }
+  if((m=t.match(/^(\d{1,2})[\s.\/-](\d{2}|\d{4})$/))){ const mo=+m[1],y=yr(m[2]); return ok(y,mo)?`${y}-${pad(mo)}`:null; }
+  if((m=t.match(/^(\d{2})(\d{2})(\d{4})$/))){ const d=+m[1],mo=+m[2],y=+m[3]; return ok(y,mo,d)?`${y}-${pad(mo)}-${pad(d)}`:null; }
+  return null;
+}
+const showExp=e=>{ if(!e) return ''; const [y,mo,d]=e.split('-'); return d?`${d}-${mo}-${y}`:`${mo}-${y}`; };
+function expStatus(exp){
+  if(!exp) return {cls:'',text:''};
+  const d=diffDays(key(new Date()),effExp(exp));
   if(d<0) return {cls:'expired',text:d===-1?'Expired yesterday':`Expired ${-d} days ago`};
   if(d===0) return {cls:'expired',text:'Expires today'};
   if(d<=(S.state.settings.soonDays||30)) return {cls:'soon',text:d===1?'Tomorrow':`In ${d} days`};
   const m=Math.round(d/30.4);
   return {cls:'',text:m<2?`In ${d} days`:m<24?`In ${m} months`:`In ${Math.round(m/12)} years`};
 }
+const itemExp=it=>it.packs.map(p=>p.exp).filter(Boolean).sort((a,b)=>effExp(a)<effExp(b)?-1:effExp(a)>effExp(b)?1:0)[0]||'';
+const packCmp=(a,b)=>(!a.exp)-(!b.exp)||(effExp(a.exp)<effExp(b.exp)?-1:effExp(a.exp)>effExp(b.exp)?1:0);
+const itemQty=it=>{ const q=it.packs.filter(p=>typeof p.qty==='number'); return q.length?Math.round(q.reduce((n,p)=>n+p.qty,0)*1000)/1000:null; };
+const itemKcal=it=>{ const q=it.packs.filter(p=>typeof p.kcal==='number'); return q.length?Math.round(q.reduce((n,p)=>n+p.kcal,0)):null; };
+const pantryStatus=it=>expStatus(itemExp(it));
+const fmtExp=showExp;
 function renderPantry(){
-  const P=S.pantry||(S.pantry={sort:'exp',dir:1,q:''});
+  const P=S.pantry||(S.pantry={sort:'exp',dir:1,q:'',open:new Set()});
+  if(!P.open) P.open=new Set();
   const items=S.state.pantry;
   const q=P.q.trim().toLowerCase();
-  const shown=items.filter(it=>!q||[it.name,it.cat,it.unit,it.notes].some(x=>x&&String(x).toLowerCase().includes(q)));
+  const shown=items.filter(it=>!q||[it.name,it.cat,it.unit,it.notes,...it.packs.map(p=>p.note)].some(x=>x&&String(x).toLowerCase().includes(q)));
   const cmpStr=(a,b)=>(a||'').localeCompare(b||'',undefined,{sensitivity:'base',numeric:true});
   shown.sort((a,b)=>{
     let r=0;
     if(P.sort==='name') r=cmpStr(a.name,b.name);
     else if(P.sort==='cat') r=(!a.cat)-(!b.cat)||cmpStr(a.cat,b.cat)||cmpStr(a.name,b.name);
-    else { r=(!a.exp)-(!b.exp); if(!r&&a.exp&&b.exp) r=a.exp<b.exp?-1:a.exp>b.exp?1:0; if(!r) r=cmpStr(a.name,b.name); if(!a.exp||!b.exp) return r; }
+    else { const ea=effExp(itemExp(a)), eb=effExp(itemExp(b)); r=(!ea)-(!eb); if(!r&&ea&&eb) r=ea<eb?-1:ea>eb?1:0; if(!r) r=cmpStr(a.name,b.name); if(!ea||!eb) return r; }
     return r*P.dir;
   });
   const wrap=h('div');
@@ -1242,69 +1539,127 @@ function renderPantry(){
     h('option',{value:'name:1'},'Name: A → Z'),h('option',{value:'name:-1'},'Name: Z → A'),
     h('option',{value:'cat:1'},'Category: A → Z'));
   sortSel.value=`${P.sort}:${P.dir}`;
-  const nExp=items.filter(it=>pantryStatus(it).cls==='expired').length, nSoon=items.filter(it=>pantryStatus(it).cls==='soon').length;
+  const allPacks=items.flatMap(it=>it.packs);
+  const nExp=allPacks.filter(p=>expStatus(p.exp).cls==='expired').length, nSoon=allPacks.filter(p=>expStatus(p.exp).cls==='soon').length;
+  const anyMulti=shown.some(it=>it.packs.length>1);
+  const allOpen=anyMulti&&shown.filter(it=>it.packs.length>1).every(it=>P.open.has(it.id));
   wrap.append(h('div',{class:'libbar'},search,sortSel,
-    h('span',{class:'libcount',text:q?`${shown.length} of ${items.length} items`:`${items.length} item${items.length===1?'':'s'}`}),
+    anyMulti?h('button',{class:'link',onclick:()=>{ shown.forEach(it=>{ if(it.packs.length>1){ allOpen?P.open.delete(it.id):P.open.add(it.id); } }); render(); }},allOpen?'Collapse all':'Expand all'):null,
+    h('span',{class:'libcount',text:q?`${shown.length} of ${items.length} items`:`${items.length} item${items.length===1?'':'s'}, ${allPacks.length} pack${allPacks.length===1?'':'s'}`}),
     h('span',{class:'pkey'},h('span',{},h('i',{style:'background:color-mix(in srgb,var(--miss) 45%,var(--sheet))'}),`Expired ${nExp}`),
       h('span',{},h('i',{style:'background:color-mix(in srgb,var(--rd) 55%,var(--sheet))'}),`Within ${S.state.settings.soonDays||30} days ${nSoon}`))));
-  const th=(label,k)=>{ if(!k) return h('th',{scope:'col'},h('span',{text:label}));
+  const th=(label,k,cls)=>{ if(!k) return h('th',{scope:'col',class:cls||null},h('span',{text:label}));
     const on=P.sort===k, arrow=on?(P.dir===1?' ↑':' ↓'):'';
     return h('th',{scope:'col','aria-sort':on?(P.dir===1?'ascending':'descending'):null},
       h('button',{'aria-sort':on?'1':null,title:`Sort by ${label.toLowerCase()}`,onclick:()=>{ if(P.sort===k) P.dir=-P.dir; else { P.sort=k; P.dir=1; } render(); }},label+arrow)); };
-  const cols=['name','qty','unit','cat','exp','notes'];
-  const moveDown=(e,colI,rowI)=>{ if(e.key!=='Enter') return; e.preventDefault(); e.target.blur();
-    const next=main.querySelector(`table.pantry [data-cell="${rowI+1}:${colI}"]`)||main.querySelector(`table.pantry [data-cell="add:${colI}"]`); if(next) next.focus(); };
-  const rows=shown.map((it,ri)=>{
-    const st=pantryStatus(it);
-    const tr=h('tr',{class:st.cls+(it.qty===0?' empty':'')});
-    const stTd=h('td',{class:'pstat',text:st.text});
-    const cell=(field,ci,attrs)=>{
-      const inp=h('input',Object.assign({'data-cell':`${ri}:${ci}`,'data-k':`p:${it.id}:${field}`,value:it[field]==null?'':String(it[field]),'aria-label':`${it.name||'Item'} ${field==='cat'?'category':field==='exp'?'expiry date':field==='qty'?'amount':field}`},attrs||{}));
-      inp.addEventListener('change',()=>{
-        let v=inp.value.trim();
-        if(field==='qty'){ if(v===''){ delete it.qty; } else { const n=Number(v.replace(',','.')); if(isFinite(n)) it.qty=n; else { inp.value=it.qty??''; return; } } }
-        else if(v) it[field]=v; else if(field!=='name') delete it[field]; else { inp.value=it.name; return; }
-        save();
-        const ns=pantryStatus(it); tr.className=ns.cls+(it.qty===0?' empty':''); stTd.textContent=ns.text;
+  const inp=(obj,field,k,attrs,after)=>{
+    const el=h('input',Object.assign({'data-k':k,value:obj[field]==null?'':String(obj[field])},attrs||{}));
+    el.addEventListener('change',()=>{
+      let v=el.value.trim();
+      if(field==='qty'||field==='kcal'){ if(v===''){ delete obj[field]; } else { const n=Number(v.replace(',','.')); if(isFinite(n)) obj[field]=n; else { el.value=obj[field]??''; return; } } }
+      else if(v) obj[field]=v; else if(field!=='name') delete obj[field]; else { el.value=obj.name; return; }
+      if(after!=='commit'){ save(); return; }
+      if(el.type==='date'){ save(); dirty=true; return; }   // dates re-sort on blur, so typing a date isn't interrupted
+      setTimeout(()=>commit(),0);
+    });
+    let dirty=false;
+    el.addEventListener('blur',()=>{ if(!dirty) return; dirty=false; setTimeout(()=>commit(),0); });
+    el.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); el.blur(); } });
+    return h('td',{},el);
+  };
+  const expIn=(pk,k,label,extra)=>{
+    const el=h('input',Object.assign({type:'text',class:'pexp','data-k':k,value:showExp(pk.exp||''),placeholder:'dd-mm-yyyy','aria-label':label,
+      title:'Day-month-year, e.g. 05-11-2026. Leave out the day for month only, e.g. 11-2026.'},extra||{}));
+    el.addEventListener('change',()=>{ const v=parseExp(el.value);
+      if(v===null){ el.classList.add('bad'); el.title='Couldn’t read that date. Use dd-mm-yyyy, or mm-yyyy for month only.'; return; }
+      el.classList.remove('bad'); if(v) pk.exp=v; else delete pk.exp; setTimeout(()=>commit(),0); });
+    el.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); el.blur(); } });
+    return h('td',{},el);
+  };
+  const delBtn=(label,onDel)=>{ const b=h('button',{class:'pdel','aria-label':label,title:`${label} (click twice)`,onclick:()=>{
+      if(!b.classList.contains('armed')){ b.classList.add('armed'); b.textContent='Delete?'; setTimeout(()=>{ if(b.isConnected){ b.classList.remove('armed'); b.textContent='×'; } },3000); return; }
+      onDel(); }},'×'); return b; };
+  const rows=[];
+  shown.forEach(it=>{
+    const multi=it.packs.length>1, open=multi&&P.open.has(it.id);
+    const st=pantryStatus(it), tq=itemQty(it), tk=itemKcal(it);
+    const toggle=()=>{ open?P.open.delete(it.id):P.open.add(it.id); render(); };
+    const nameIn=h('input',{type:'text','data-k':`p:${it.id}:name`,value:it.name,'aria-label':'Item'});
+    nameIn.addEventListener('change',()=>{ const v=nameIn.value.trim(); if(v){ it.name=v; save(); } else nameIn.value=it.name; });
+    nameIn.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); nameIn.blur(); } });
+    const one=it.packs.length===1?it.packs[0]:null;
+    const addPack=()=>{ const last=it.packs[it.packs.length-1]; const pk={id:uid()}; if(last&&typeof last.qty==='number') pk.qty=last.qty; if(last&&typeof last.kcal==='number') pk.kcal=last.kcal; it.packs.push(pk); P.open.add(it.id); S.focus=`pk:${pk.id}:exp`; commit(); };
+    rows.push(h('tr',{class:'pitemrow '+st.cls+(tq===0?' empty':'')},
+      h('td',{},h('div',{class:'pname'},
+        multi?h('button',{class:'ptog','aria-expanded':String(open),'aria-label':open?`Hide ${it.name} packs`:`Show all ${it.packs.length} packs of ${it.name}`,'data-k':`pt:${it.id}`,onclick:toggle},open?'▾':'▸'):h('span',{class:'ptogsp'}),
+        nameIn)),
+      h('td',{class:'pcount'},multi?h('button',{class:'pcbtn',onclick:toggle,title:open?'Hide packs':'Show all packs'},`${it.packs.length}`):h('span',{text:it.packs.length?'1':'0'})),
+      one?inp(one,'qty',`pk:${one.id}:qty`,{type:'text',inputmode:'decimal',class:'num',placeholder:'amount','aria-label':`${it.name} amount`},'commit')
+         :h('td',{class:'pro num'},h('button',{class:'ptotal',title:'Total across all packs. Click to edit each pack’s amount.','aria-label':`${it.name}: total ${tq??0}. Edit pack amounts`,
+            onclick:()=>{ P.open.add(it.id); const first=[...it.packs].sort(packCmp)[0]; if(first) S.focus=`pk:${first.id}:qty`; render(); }},
+            tq==null?'—':String(tq),h('span',{class:'ptedit','aria-hidden':'true',text:'✎'}))),
+      inp(it,'unit',`p:${it.id}:unit`,{type:'text',list:'punits','aria-label':`${it.name} unit`}),
+      one?inp(one,'kcal',`pk:${one.id}:kcal`,{type:'text',inputmode:'decimal',class:'num',placeholder:'kcal','aria-label':`${it.name} calories`},'commit')
+         :h('td',{class:'pro num'},h('button',{class:'ptotal',title:'Total calories across all packs. Click to edit each pack’s calories.','aria-label':`${it.name}: total ${tk??0} kcal. Edit pack calories`,
+            onclick:()=>{ P.open.add(it.id); const first=[...it.packs].sort(packCmp)[0]; if(first) S.focus=`pk:${first.id}:kcal`; render(); }},
+            tk==null?'—':String(tk),h('span',{class:'ptedit','aria-hidden':'true',text:'✎'}))),
+      inp(it,'cat',`p:${it.id}:cat`,{type:'text',list:'pcats','aria-label':`${it.name} category`},'commit'),
+      one?expIn(one,`pk:${one.id}:exp`,`${it.name} expiry date`)
+         :h('td',{class:'pro',title:multi?'Closest expiry date':''},multi&&itemExp(it)?h('span',{},fmtExp(itemExp(it)),h('span',{class:'pfirst',text:' (first)'})):''),
+      h('td',{class:'pstat',text:st.text}),
+      inp(it,'notes',`p:${it.id}:notes`,{type:'text','aria-label':`${it.name} notes`}),
+      h('td',{class:'pacts2'},h('button',{class:'paddpk',title:'Add another pack with its own expiry date','aria-label':`Add a pack of ${it.name}`,onclick:addPack},'+ pack'),
+        delBtn(`Delete ${it.name}`,()=>{ S.state.pantry=S.state.pantry.filter(x=>x!==it); commit(); }))));
+    if(open){
+      [...it.packs].sort(packCmp).forEach((pk,pi)=>{
+        const ps=expStatus(pk.exp);
+        rows.push(h('tr',{class:'packrow '+ps.cls+(pk.qty===0?' empty':'')},
+          h('td',{class:'pklabel',text:`Pack ${pi+1}`}),
+          h('td',{}),
+          inp(pk,'qty',`pk:${pk.id}:qty`,{type:'text',inputmode:'decimal',class:'num',placeholder:'amount','aria-label':`${it.name} pack ${pi+1} amount`,'data-autofocus':S.focus===`pk:${pk.id}:qty`?'1':null},'commit'),
+          h('td',{class:'pro',text:it.unit||''}),
+          inp(pk,'kcal',`pk:${pk.id}:kcal`,{type:'text',inputmode:'decimal',class:'num',placeholder:'kcal','aria-label':`${it.name} pack ${pi+1} calories`,'data-autofocus':S.focus===`pk:${pk.id}:kcal`?'1':null},'commit'),
+          h('td',{}),
+          expIn(pk,`pk:${pk.id}:exp`,`${it.name} pack ${pi+1} expiry date`,{'data-autofocus':S.focus===`pk:${pk.id}:exp`?'1':null}),
+          h('td',{class:'pstat',text:ps.text}),
+          inp(pk,'note',`pk:${pk.id}:note`,{type:'text','aria-label':`${it.name} pack ${pi+1} note`,placeholder:'pack note'}),
+          h('td',{class:'pacts2'},delBtn(`Delete this pack of ${it.name}`,()=>{ it.packs=it.packs.filter(x=>x!==pk); if(it.packs.length<2) P.open.delete(it.id); commit(); }))));
       });
-      inp.addEventListener('keydown',e=>moveDown(e,ci,ri));
-      return h('td',{},inp);
-    };
-    const del=h('button',{class:'pdel','aria-label':`Delete ${it.name}`,title:'Delete (click twice)',onclick:()=>{
-      if(!del.classList.contains('armed')){ del.classList.add('armed'); del.textContent='Delete?'; setTimeout(()=>{ if(del.isConnected){ del.classList.remove('armed'); del.textContent='×'; } },3000); return; }
-      S.state.pantry=S.state.pantry.filter(x=>x!==it); commit(); }},'×');
-    tr.append(cell('name',0,{type:'text'}),cell('qty',1,{type:'text',inputmode:'decimal',class:'num'}),cell('unit',2,{type:'text',list:'punits'}),
-      cell('cat',3,{type:'text',list:'pcats'}),cell('exp',4,{type:'date'}),stTd,cell('notes',5,{type:'text'}),h('td',{},del));
-    return tr;
+    }
   });
   // add row
   const D=P.draft||(P.draft={});
-  const addCell=(field,ci,attrs)=>{ const inp=h('input',Object.assign({'data-cell':`add:${ci}`,value:D[field]||'',
-      'data-autofocus':(ci===0&&S.focus==='pantry-add')?'1':null,'aria-label':`New item ${field==='cat'?'category':field==='exp'?'expiry date':field==='qty'?'amount':field}`},attrs||{}));
-    inp.addEventListener('input',()=>{D[field]=inp.value});
-    inp.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); addItem(); } });
-    return h('td',{},inp); };
+  const addCell=(field,attrs)=>{ const el=h('input',Object.assign({value:D[field]||'','aria-label':`New item ${field==='cat'?'category':field==='exp'?'expiry date':field==='qty'?'amount':field==='kcal'?'calories':field}`},attrs||{}));
+    el.addEventListener('input',()=>{D[field]=el.value});
+    el.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); addItem(); } });
+    return h('td',{},el); };
   const addItem=()=>{
-    const name=(D.name||'').trim(); if(!name){ const f=main.querySelector('[data-cell="add:0"]'); if(f) f.focus(); return; }
-    const it={id:uid(),name};
-    if(D.qty&&isFinite(Number(String(D.qty).replace(',','.')))) it.qty=Number(String(D.qty).replace(',','.'));
-    ['unit','cat','exp','notes'].forEach(k=>{ if(D[k]&&String(D[k]).trim()) it[k]=String(D[k]).trim(); });
-    S.state.pantry.push(it); P.draft={unit:D.unit||'',cat:D.cat||''}; S.focus='pantry-add'; commit();
+    const name=(D.name||'').trim(); if(!name){ const f=main.querySelector('[data-k="padd"]'); if(f) f.focus(); return; }
+    const pk={id:uid()}; const qn=Number(String(D.qty||'').replace(',','.'));
+    if(String(D.qty||'').trim()&&isFinite(qn)) pk.qty=qn; const pe=parseExp(D.exp); if(pe===null){ const f=main.querySelector('[data-k="paddexp"]'); if(f){ f.classList.add('bad'); f.focus(); } return; } if(pe) pk.exp=pe; const kn=Number(String(D.kcal||'').replace(',','.')); if(String(D.kcal||'').trim()&&isFinite(kn)) pk.kcal=kn;
+    let it=items.find(x=>x.name.trim().toLowerCase()===name.toLowerCase());
+    if(it){ it.packs.push(pk); if(!it.unit&&(D.unit||'').trim()) it.unit=D.unit.trim(); if(!it.cat&&(D.cat||'').trim()) it.cat=D.cat.trim(); P.open.add(it.id); }
+    else { it={id:uid(),name,packs:[pk]}; ['unit','cat','notes'].forEach(k=>{ if(D[k]&&String(D[k]).trim()) it[k]=String(D[k]).trim(); }); S.state.pantry.push(it); }
+    P.draft={unit:D.unit||'',cat:D.cat||''}; S.focus='pantry-add'; commit();
   };
+  const kTot=shown.reduce((n,it)=>n+(itemKcal(it)||0),0);
+  const totRow=h('tr',{class:'ptotrow'},h('td',{colspan:'4',text:q?`Total for ${shown.length} shown item${shown.length===1?'':'s'}`:'Total in pantry'}),
+    h('td',{class:'n','aria-label':`Total calories: ${kTot}`},String(Math.round(kTot)),h('span',{class:'u',text:'kcal'})),h('td',{colspan:'5'}));
   const cats=[...new Set(items.map(x=>x.cat).filter(Boolean))].sort(cmpStr);
   const units=[...new Set(PUNITS.concat(items.map(x=>x.unit).filter(Boolean)))];
   const table=h('table',{class:'pantry'},
-    h('colgroup',{},h('col',{style:'width:24%'}),h('col',{style:'width:8%'}),h('col',{style:'width:8%'}),h('col',{style:'width:14%'}),h('col',{style:'width:13%'}),h('col',{style:'width:12%'}),h('col',{}),h('col',{style:'width:5.5rem'})),
-    h('thead',{},h('tr',{},th('Item','name'),th('Amount'),th('Unit'),th('Category','cat'),th('Expires','exp'),th('Status'),th('Notes'),th(''))),
-    h('tbody',{},rows.length?rows:h('tr',{},h('td',{colspan:'8',class:'pstat',style:'padding:14px 10px',text:items.length?'No items match that search.':'No items yet. Add your first one in the row below.'}))),
-    h('tfoot',{},h('tr',{},addCell('name',0,{type:'text',placeholder:'+ New item'}),addCell('qty',1,{type:'text',inputmode:'decimal',class:'num',placeholder:'0'}),
-      addCell('unit',2,{type:'text',list:'punits',placeholder:'unit'}),addCell('cat',3,{type:'text',list:'pcats',placeholder:'category'}),
-      addCell('exp',4,{type:'date'}),h('td',{}),addCell('notes',5,{type:'text',placeholder:'notes'}),
-      h('td',{},h('button',{class:'pill primary',style:'margin:3px 6px;padding:4px 10px',onclick:addItem},'Add')))));
+    h('colgroup',{},h('col',{style:'width:20%'}),h('col',{style:'width:5%'}),h('col',{style:'width:7%'}),h('col',{style:'width:7%'}),h('col',{style:'width:7%'}),h('col',{style:'width:11%'}),h('col',{style:'width:10.5%'}),h('col',{style:'width:10.5%'}),h('col',{}),h('col',{style:'width:8.5rem'})),
+    h('thead',{},h('tr',{},th('Item','name'),th('Packs'),th('Amount'),th('Unit'),th('kcal'),th('Category','cat'),th('Expires','exp'),th('Status'),th('Notes'),th(''))),
+    h('tbody',{},rows.length?rows:h('tr',{},h('td',{colspan:'10',class:'pstat',style:'padding:14px 10px',text:items.length?'No items match that search.':'No items yet. Add your first one in the row below.'}))),
+    h('tfoot',{},h('tr',{},addCell('name',{type:'text',placeholder:'+ New item or pack','data-k':'padd','data-autofocus':S.focus==='pantry-add'?'1':null}),h('td',{}),
+      addCell('qty',{type:'text',inputmode:'decimal',class:'num',placeholder:'0'}),
+      addCell('unit',{type:'text',list:'punits',placeholder:'unit'}),addCell('kcal',{type:'text',inputmode:'decimal',class:'num',placeholder:'kcal'}),addCell('cat',{type:'text',list:'pcats',placeholder:'category'}),
+      addCell('exp',{type:'text',placeholder:'dd-mm-yyyy','data-k':'paddexp',title:'Day-month-year, e.g. 05-11-2026, or mm-yyyy for month only'}),h('td',{}),addCell('notes',{type:'text',placeholder:'notes'}),
+      h('td',{},h('button',{class:'pill primary',style:'margin:3px 6px;padding:4px 10px',onclick:addItem},'Add'))),totRow));
   wrap.append(h('div',{class:'pwrap'},table),
     h('datalist',{id:'punits'},units.map(u=>h('option',{value:u}))),
     h('datalist',{id:'pcats'},cats.map(c=>h('option',{value:c}))),
-    h('p',{class:'libcount',style:'margin-top:10px',text:'Click any cell to edit it. Enter moves down a row; Tab moves across. Click Item, Category or Expires to sort. Rows re-sort when you change the sort or add an item.'}));
+    h('p',{class:'libcount',style:'margin-top:10px',text:'Items with several packs show the closest expiry date, the number of packs, and the total amount and calories across them; click ▸ or the pack count to see each pack. Use “+ pack” to add another pack with its own date, or type an existing item’s name in the bottom row to add a pack to it. Dates are day-month-year (05-11-2026); leave out the day for month-only dates (11-2026), which count as the end of that month.'}));
   return wrap;
 }
 
@@ -1367,16 +1722,16 @@ function renderLibrary(){
       x.value=L.int; return x; })(),
     h('button',{class:'pill',onclick:()=>{ const n=uniqueName('New genre',G.map(g=>g.name)); G.push({name:n,subs:[]}); L.rename={t:'g',name:n}; L.q=''; commit(); }},'Add genre'),
     h('button',{class:'link',onclick:()=>{ if(allClosed) L.closed.clear(); else G.forEach(g=>L.closed.add('g:'+g.name)); render(); }},allClosed?'Expand all':'Collapse all'),
-    h('span',{class:'libcount',text:filtering?`${books.length} of ${S.state.books.length} books`:`${S.state.books.length} books in ${G.length} genres, ${allSubgenres().length} subgenres`}),
+    h('span',{class:'libcount',text:filtering?`${sumV(books)} of ${sumV(S.state.books)} books`:`${sumV(S.state.books)} books in ${G.length} genres, ${allSubgenres().length} subgenres`}),
     h('span',{class:'statkey'},h('span',{},h('i',{style:'background:var(--rd)'}),`Reading ${nRd}`),h('span',{},h('i',{style:'background:var(--ok)'}),`Read ${nDone}`))));
   const jumpTo=(id,gName,sName)=>{ if(gName) L.closed.delete('g:'+gName); if(sName) L.closed.delete('s:'+sName); render();
     const el=document.getElementById(id); if(el){ const rm=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches; el.scrollIntoView({behavior:rm?'auto':'smooth',block:'start'}); } };
   const toc=h('aside',{class:'toc','aria-label':'Library contents'},
     h('div',{class:'tochd'},h('b',{text:'Contents'}),h('button',{class:'link',style:'width:auto;padding:0',onclick:()=>window.scrollTo({top:0,behavior:'smooth'})},'↑ Top')),
-    h('ul',{class:'tocg'},G.map((g,gi)=>{ const n=books.filter(b=>g.subs.includes(b.genre)).length;
+    h('ul',{class:'tocg'},G.map((g,gi)=>{ const n=sumV(books.filter(b=>g.subs.includes(b.genre)));
       return h('li',{},
         h('button',{class:'tg','data-toc':'lg-'+gi,disabled:filtering&&!n,onclick:()=>jumpTo('lg-'+gi,g.name)},g.name,h('span',{text:String(n)})),
-        h('ul',{class:'tocs'},g.subs.map((x,si)=>{ const m=books.filter(b=>b.genre===x).length;
+        h('ul',{class:'tocs'},g.subs.map((x,si)=>{ const m=sumV(books.filter(b=>b.genre===x));
           return h('li',{},h('button',{class:'ts','data-toc':`ls-${gi}-${si}`,'data-parent':'lg-'+gi,disabled:filtering&&!m,onclick:()=>jumpTo(`ls-${gi}-${si}`,g.name,x)},x,h('span',{text:String(m)}))); }))); })));
   const content=h('div',{class:'libcontent'});
   const outer=wrap; outer.append(h('div',{class:'libwrap'},toc,content));
@@ -1393,7 +1748,7 @@ function renderLibrary(){
       ? renameInput('gname',grp.name,v=>{ if(v&&v!==grp.name&&!G.some(x=>x.name===v)){ if(L.closed.delete('g:'+grp.name)) L.closed.add('g:'+v); grp.name=v; } commit(); })
       : h('button',{class:'gtoggle','aria-expanded':String(!gClosed),'data-k':'gg:'+grp.name,onclick:()=>{ const k='g:'+grp.name; L.closed.has(k)?L.closed.delete(k):L.closed.add(k); render(); }},
           h('span',{class:'chev',text:gClosed?'▸':'▾'}),h('h2',{text:grp.name}));
-    sec.append(h('div',{class:'ggrouphd'},head,h('span',{class:'gcount',text:`${inGroup.length} book${inGroup.length===1?'':'s'}`}),h('span',{class:'spacer'}),
+    sec.append(h('div',{class:'ggrouphd'},head,h('span',{class:'gcount',text:`${sumV(inGroup)} book${sumV(inGroup)===1?'':'s'}`}),h('span',{class:'spacer'}),
       q?null:h('button',{class:'gmove','aria-label':`Move ${grp.name} up`,title:'Move up',disabled:gi===0,'data-k':'ggu:'+grp.name,onclick:()=>gmv(-1)},'↑'),
       q?null:h('button',{class:'gmove','aria-label':`Move ${grp.name} down`,title:'Move down',disabled:gi===G.length-1,'data-k':'ggd:'+grp.name,onclick:()=>gmv(1)},'↓'),
       h('button',{class:'link',onclick:()=>{ const n=uniqueName('New subgenre',allSubgenres()); grp.subs.push(n); L.closed.delete('g:'+grp.name); L.rename={t:'s',name:n}; L.q=''; commit(); }},'Add subgenre'),
@@ -1414,7 +1769,7 @@ function renderLibrary(){
         const moveSel=G.length>1&&!q?h('select',{'aria-label':`Move ${sub} to another genre`,title:'Move to another genre',onchange:e=>{
             const to=G.find(x=>x.name===e.target.value); if(!to||to===grp) return; grp.subs.splice(si,1); to.subs.push(sub); commit(); }},
             h('option',{value:''},'Move to…'),G.filter(x=>x!==grp).map(x=>h('option',{value:x.name},x.name))):null;
-        ss.append(h('div',{class:'genrehd'},shead,h('span',{class:'gcount',text:String(list.length)}),
+        ss.append(h('div',{class:'genrehd'},shead,h('span',{class:'gcount',text:String(sumV(list))}),
           h('button',{class:'addbook','data-k':'ab:'+sub,'aria-label':`Add a book to ${sub}`,onclick:()=>{ L.adding=sub; L.addDraft={title:'',author:'',status:''}; L.closed.delete('s:'+sub); render(); }},'+ Add book'),
           h('span',{class:'spacer'}),
           q?null:h('button',{class:'gmove','aria-label':`Move ${sub} up`,title:'Move up',disabled:si===0,'data-k':'gmu:'+sub,onclick:()=>smv(-1)},'↑'),
@@ -1440,18 +1795,19 @@ function renderLibrary(){
           const D=L.addDraft||(L.addDraft={title:'',author:'',status:''});
           const ti=h('input',{class:'at',type:'text',placeholder:'Title',value:D.title,'aria-label':`Title of new book in ${sub}`,'data-autofocus':'1'});
           const au=h('input',{class:'aa',type:'text',placeholder:'Author (optional)',value:D.author,'aria-label':'Author'});
-          ti.addEventListener('input',()=>{D.title=ti.value}); au.addEventListener('input',()=>{D.author=au.value});
+          const av=h('input',{class:'av',type:'number',min:'1',step:'1',placeholder:'# books',value:D.vols||'','aria-label':'Number of books in the series (leave blank for one)',title:'Books in series (leave blank for a single book)'});
+          ti.addEventListener('input',()=>{D.title=ti.value}); au.addEventListener('input',()=>{D.author=au.value}); av.addEventListener('input',()=>{D.vols=av.value});
           const stLabel={'':'○ Not started',reading:'◐ Reading',read:'● Read'};
           const stb=h('button',{class:'astat '+(D.status||''),type:'button',title:'Click to change reading status','aria-label':`Status: ${stLabel[D.status||'']}. Click to change`,
             onclick:()=>{ D.status=!D.status?'reading':D.status==='reading'?'read':''; stb.className='astat '+D.status; stb.textContent=stLabel[D.status]; stb.setAttribute('aria-label',`Status: ${stLabel[D.status]}. Click to change`); }},stLabel[D.status||'']);
           const add=()=>{ const t=D.title.trim(); if(!t){ ti.focus(); return; }
-            const nb={id:uid(),title:t,author:D.author.trim(),genre:sub}; if(D.status) nb.status=D.status; if(D.interest) nb.interest=D.interest;
+            const nb={id:uid(),title:t,author:D.author.trim(),genre:sub}; if(D.status) nb.status=D.status; if(D.interest) nb.interest=D.interest; const nv=Math.round(Number(D.vols)); if(nv>1) nb.vols=nv;
             S.state.books.push(nb); L.addDraft={title:'',author:'',status:D.status,interest:0}; commit(); };
           const close=()=>{ L.adding=null; L.addDraft=null; render(); };
-          [ti,au].forEach(x=>x.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); add(); } else if(e.key==='Escape'){ e.preventDefault(); close(); } }));
+          [ti,au,av].forEach(x=>x.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); add(); } else if(e.key==='Escape'){ e.preventDefault(); close(); } }));
           const aint=h('span',{class:'aint',role:'group','aria-label':'Interest'},[1,2,3].map(n=>h('button',{type:'button',class:(D.interest||0)>=n?'on':'',title:`Interest ${n} of 3 (click again to clear)`,'aria-label':`Interest ${n} of 3`,
             onclick:()=>{ D.interest=D.interest===n?0:n; aint.querySelectorAll('button').forEach((x,i)=>x.classList.toggle('on',(D.interest||0)>i)); }},'★')));
-          addRow=h('li',{class:'addrow'},stb,aint,ti,au,
+          addRow=h('li',{class:'addrow'},stb,aint,ti,au,av,
             h('button',{class:'pill primary',type:'button',onclick:add},'Add'),
             h('button',{class:'pill',type:'button',onclick:close},'Done'),
             h('span',{class:'addhint',text:`Press Enter to add to ${sub} and start the next one. Esc or Done when finished.`}));
@@ -1471,7 +1827,7 @@ function renderLibrary(){
             h('div',{class:'book',role:'button',tabindex:'0','data-k':'bk:'+b.id,onclick:()=>openBook(b.id),
               onkeydown:e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openBook(b.id); } },
               title:'Click to edit. Drag to another subgenre to move it.','aria-label':`${b.title}${b.author?`, ${b.author}`:''}. Edit`},
-            h('span',{class:'bt',text:b.title}),
+            h('span',{class:'bt'},b.title,b.vols>1?h('span',{class:'bv',title:`A series of ${b.vols} books`,text:`${b.vols} books`}):null),
             b.lang&&!/^english$/i.test(b.lang)?h('span',{class:'bl',text:b.lang}):null,
             b.author?h('span',{class:'ba',text:b.author}):null,
             b.notes?h('span',{class:'bn',text:b.notes}):null),
@@ -1496,6 +1852,23 @@ function fillGenreSel(sel){
   $('bkErr').textContent='';
   $('bkNewWrap').hidden=$('bkGenre').value!==NEWG;
 }
+const bvol=b=>b&&b.vols>1?b.vols:1;
+const sumV=list=>list.reduce((n,b)=>n+bvol(b),0);
+let bkMerge=[];
+function fillMerge(){
+  const g=$('bkGenre').value, others=S.state.books.filter(x=>x.id!==bookId&&!bkMerge.includes(x.id));
+  const same=others.filter(x=>x.genre===g).sort((a,b)=>a.title.localeCompare(b.title)), rest=others.filter(x=>x.genre!==g).sort((a,b)=>a.title.localeCompare(b.title));
+  const opt=x=>h('option',{value:x.id},x.title+(x.vols>1?` (${x.vols} books)`:'')+(x.author?` – ${x.author}`:''));
+  $('bkMerge').replaceChildren(h('option',{value:''},'Choose a book…'),
+    same.length?h('optgroup',{label:'Same subgenre'},same.map(opt)):null,
+    rest.length?h('optgroup',{label:'Other subgenres'},rest.map(opt)):null);
+  $('bkMerge').value='';
+  $('bkMerged').replaceChildren(...bkMerge.map(id=>{ const x=S.state.books.find(y=>y.id===id); if(!x) return null;
+    return h('span',{class:'mchip'},`Merging: ${x.title}`,h('button',{type:'button','aria-label':`Don't merge ${x.title}`,title:'Undo',onclick:()=>{
+      bkMerge=bkMerge.filter(y=>y!==id); const v=Math.max(1,(Number($('bkVols').value)||1)-bvol(x)); $('bkVols').value=v>1?String(v):''; fillMerge(); }},'×')); }));
+}
+$('bkMerge').addEventListener('change',()=>{ const id=$('bkMerge').value; if(!id) return; const x=S.state.books.find(y=>y.id===id); if(!x) return;
+  bkMerge.push(id); $('bkVols').value=String((Number($('bkVols').value)||1)+bvol(x)); fillMerge(); });
 function openBook(id,preGenre){
   const b=id?S.state.books.find(x=>x.id===id):null;
   bookId=b?b.id:null;
@@ -1505,10 +1878,11 @@ function openBook(id,preGenre){
   const langs=[...new Set(S.state.books.map(x=>x.lang).filter(Boolean).concat(['English']))].sort();
   $('bkLangs').replaceChildren(...langs.map(l=>h('option',{value:l})));
   fillGenreSel(b?b.genre:preGenre);
+  bkMerge=[]; $('bkVols').value=b&&b.vols>1?String(b.vols):''; fillMerge();
   $('bkDel').hidden=!b;
   bookDlg.showModal(); $('bkTitle').focus();
 }
-$('bkGenre').addEventListener('change',()=>{ $('bkNewWrap').hidden=$('bkGenre').value!==NEWG; if(!$('bkNewWrap').hidden) $('bkNewGenre').focus(); });
+$('bkGenre').addEventListener('change',()=>{ fillMerge(); $('bkNewWrap').hidden=$('bkGenre').value!==NEWG; if(!$('bkNewWrap').hidden) $('bkNewGenre').focus(); });
 function saveBook(){
   const title=$('bkTitle').value.trim(); if(!title){ $('bkTitle').focus(); return; }
   let genre=$('bkGenre').value;
@@ -1521,9 +1895,11 @@ function saveBook(){
   const data={title,author:$('bkAuthor').value.trim(),genre,lang:$('bkLang').value.trim(),notes:$('bkNotes').value.trim()};
   const st=$('bkStatus').dataset.v||''; if(st) data.status=st;
   const iv=$('bkInt').dataset.v||''; if(iv) data.interest=Number(iv);
+  const vols=Math.round(Number($('bkVols').value)); if(vols>1) data.vols=vols;
   if(!data.lang) delete data.lang; if(!data.notes) delete data.notes;
-  if(bookId){ const b=S.state.books.find(x=>x.id===bookId); delete b.lang; delete b.notes; delete b.status; delete b.interest; Object.assign(b,data); }
+  if(bookId){ const b=S.state.books.find(x=>x.id===bookId); delete b.lang; delete b.notes; delete b.status; delete b.interest; delete b.vols; Object.assign(b,data); }
   else S.state.books.push(Object.assign({id:uid()},data));
+  if(bkMerge.length){ S.state.books=S.state.books.filter(x=>!bkMerge.includes(x.id)); bkMerge=[]; }
   S.lib=S.lib||{q:'',sort:'title',closed:new Set(),rename:null}; S.lib.lastGenre=genre; S.lib.closed.delete('s:'+genre); const gg=groupOfSub(genre); if(gg) S.lib.closed.delete('g:'+gg.name);
   bookDlg.close(); commit();
 }
@@ -1553,15 +1929,22 @@ function renderWeek(){
   const today=key(new Date());
   const grid=h('div',{class:'week'});
   grid.style.gridTemplateColumns=colTemplate();
+  const themes=S.state.themes.filter(t=>t.show);
+  if(themes.length){
+    grid.append(h('div',{class:'wklabel',title:'Things for this week without a set day'},'This week'));
+    const wkrow=h('div',{class:'wkrow',role:'group','aria-label':'This week, any day'});
+    themes.forEach(t=>{ const c=renderCell(t,{week:key(S.week)},false,false); c.prepend(h('div',{class:'wkthm',text:t.name})); wkrow.append(c); });
+    grid.append(wkrow);
+  }
   grid.append(h('div'));
-  const hdrs=[h('div',{class:'dayhead weekhead',title:'Things for this week without a set day'},h('span',{class:'wk',text:'Any day'}))];
+  const hdrs=[];
   days.forEach(d=>{
     const k=key(d);
     hdrs.push(h('div',{class:'dayhead'+(k===today?' today':''),title:fmtLong.format(d)},
       h('span',{class:'dow',text:fmtDow.format(d)}),h('span',{class:'dnum',text:String(d.getDate())})));
   });
   hdrs.forEach((hd,i)=>{
-    if(i<7){
+    if(i<6){
       const grip=h('div',{class:'colgrip',role:'separator','aria-orientation':'vertical',tabindex:'0','data-k':'grip:'+i,
         'aria-label':'Resize column. Left and right arrows adjust, double-click resets all',title:'Drag to resize. Double-click to reset all columns.'});
       grip.addEventListener('pointerdown',e=>startResize(e,i,grid,hdrs));
@@ -1578,10 +1961,8 @@ function renderWeek(){
     grid.append(hd);
   });
   grid.append(renderAllDay(days,today));
-  const themes=S.state.themes.filter(t=>t.show);
   themes.forEach((t,ti)=>{
     grid.append(renderSpine(t));
-    grid.append(renderCell(t,{week:key(S.week)},false,false));
     days.forEach((d,i)=>grid.append(renderCell(t,{date:key(d),d},key(d)===today,i===6)));
   });
   if(S.state.settings.showSpend) renderSpendRow(grid,days,today);
@@ -1591,7 +1972,7 @@ function renderWeek(){
     h('button',{class:'pill',onclick:()=>openThemes()},'Themes and colours'),
     h('button',{class:'pill',onclick:()=>{S.state.settings.showSpend=!S.state.settings.showSpend;commit()}},S.state.settings.showSpend?'Hide spending row':'Show spending row'),
     S.state.settings.cols?h('button',{class:'pill',onclick:()=>{delete S.state.settings.cols;commit()}},'Reset column widths'):null,
-    h('span',{text:themes.length?'Drag a theme name to reorder rows. Drag tasks to reorder them, or onto another day, theme or Any day. Click ! to mark a task high priority. Click a task to edit it and see its sub-tasks.':'All themes are hidden. Open Themes and colours to show one.'}));
+    h('span',{text:themes.length?'Drag a theme name to reorder rows. Drag tasks to reorder them, or onto another day, theme or the This week row. Click ! to mark a task high priority. Click a task to edit it and see its sub-tasks.':'All themes are hidden. Open Themes and colours to show one.'}));
   out.append(foot);
   out.append(renderMonth());
   return out;
@@ -1623,14 +2004,13 @@ function renderAllDay(days,today){
   strip.append(h('div',{class:'adlabel',style:`grid-row:${rows}`},'All day'));
   days.forEach((d,i)=>{
     const k=key(d);
-    strip.append(h('button',{class:'adcell'+(k===today?' today':'')+(i===6?' last':''),style:`grid-column:${i+3};grid-row:${rows}`,
+    strip.append(h('button',{class:'adcell'+(k===today?' today':'')+(i===6?' last':''),style:`grid-column:${i+2};grid-row:${rows}`,
       'aria-label':`Add an event on ${fmtLong.format(d)}`,onclick:()=>openEvent(null,k)},h('span',{class:'adplus'},'+ Event')));
   });
-  strip.append(h('div',{class:'adblank',style:`grid-column:2;grid-row:${rows}`}));
   occ.forEach(o=>{
     const t=evType(o.ev.type);
     const label=(o.contL?'‹ ':'')+(o.ev.title||'Untitled')+(o.contR?' ›':'');
-    strip.append(h('div',{class:'adev',role:'button',tabindex:'0',style:`--c:${t.color};grid-column:${o.s+3}/${o.e+4};grid-row:${o.lane+1}`,
+    strip.append(h('div',{class:'adev',role:'button',tabindex:'0',style:`--c:${t.color};grid-column:${o.s+2}/${o.e+3};grid-row:${o.lane+1}`,
       title:evTip(o.ev,t.name),'aria-label':`${o.ev.title||'Untitled'}${evTime(o.ev)?`, ${evTime(o.ev)}`:''}, ${t.name}. Edit`,onclick:()=>openEvent(o.ev.id),
       onkeydown:e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); openEvent(o.ev.id); } }},o.ev.t1?h('span',{class:'evtm',text:o.ev.t1}):null,h('span',{class:'evtxt',text:label}),o.ev.notes?h('span',{class:'evnote','aria-hidden':'true',text:'✎'}):null,evLink(o.ev)));
   });
@@ -1853,7 +2233,7 @@ function renderItem(it,move){
       if(e.altKey&&(e.key==='ArrowUp'||e.key==='ArrowDown')){ e.preventDefault(); move&&move(e.key==='ArrowUp'?-1:1); return; }
       if(e.key==='Enter'||e.key===' '){ e.preventDefault(); selectTask(o.id); startEdit(edSpec); }
     });
-    li.append(h('div',{class:'tbody'},sp,it.goal?h('span',{class:'gtag',text:(it.goal.title||'Untitled goal')+(it.sub&&it.sub.title?` › ${it.sub.title}`:'')}):null));
+    li.append(h('div',{class:'tbody'},sp,it.goal?h('span',{class:'gtag',text:(it.goal.title||'Untitled project')+(it.sub&&it.sub.title?` › ${it.sub.title}`:'')}):null));
   }
   if(sel){
     const log=o.log||[];
@@ -1894,7 +2274,7 @@ function renderItem(it,move){
   if(it.kind==='task'){
     li.append(h('button',{class:'x','aria-label':'Delete task',title:'Delete task',onclick:()=>{S.state.tasks=S.state.tasks.filter(x=>x!==o);commit()}},'×'));
   } else {
-    li.append(h('button',{class:'x','aria-label':'Take this step off the day',title:'Unschedule (the step stays in its goal)',onclick:()=>{o.date=null;commit()}},'×'));
+    li.append(h('button',{class:'x','aria-label':'Take this step off the day',title:'Unschedule (the task stays in its project)',onclick:()=>{o.date=null;commit()}},'×'));
   }
   li.append(...extra);
   return li;
@@ -1903,7 +2283,7 @@ function renderItem(it,move){
 /* ---------- goals view ---------- */
 function newGoal(){
   const themeId=S.filter!=='all'?S.filter:S.state.themes[0].id;
-  const g={id:uid(),title:'',themeId,due:'',done:false,subs:[]};
+  const g={id:uid(),title:'',themeId,due:'',done:false,open:true,subs:[]};
   S.state.goals.unshift(g); S.focus='g:'+g.id; commit();
 }
 function goalDelete(g){
@@ -1916,21 +2296,51 @@ function renderGoals(){
   const wrap=h('div');
   const chip=(id,label,color)=>h('button',{class:'chip','aria-pressed':String(S.filter===id),style:color?`--c:${color}`:null,'data-k':'chip:'+id,onclick:()=>{S.filter=id;render()}},color?h('i'):null,label);
   wrap.append(h('div',{class:'gbar'},
-    h('button',{class:'pill primary',onclick:newGoal},'New goal'),
+    h('button',{class:'pill primary',onclick:newGoal},'New project'),
     h('div',{class:'chips',role:'group','aria-label':'Filter by theme'},chip('all','All',null),S.state.themes.map(t=>chip(t.id,t.name,t.color)))));
   const vis=S.state.goals.filter(g=>S.filter==='all'||themeOf(g.themeId).id===S.filter);
   const active=vis.filter(g=>!g.done), done=vis.filter(g=>g.done);
-  if(!active.length){
-    wrap.append(h('p',{class:'empty',text:S.state.goals.length
-      ?'No open goals here.'
-      :'No goals yet. Add an overarching goal, split it into sub-goals, list the tasks for each, then give a task a date to put it on your week.'}));
-  } else wrap.append(h('div',{class:'goals'},active.map((g,i)=>goalCard(g,i,active))));
+  if(!S.state.goals.length){
+    wrap.append(h('p',{class:'empty',text:'No projects yet. Add one, split it into sub-goals, list the tasks for each, then give a task a date to put it on your week.'}));
+    return wrap;
+  }
+  const open=active.filter(g=>g.open);
+  const scrollTo=id=>setTimeout(()=>{ const el=document.getElementById('proj-'+id); if(el){ const rm=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches; el.scrollIntoView({behavior:rm?'auto':'smooth',block:'start'}); } },0);
+  const items=active.map((g,i)=>{
+    const t=themeOf(g.themeId), st=allSteps(g), n=st.length, dn=st.filter(x=>x.done).length;
+    const li=h('li',{});
+    const btn=h('button',{class:'pitem'+(g.open?' on':''),style:`--c:${t.color}`,draggable:'true','data-k':'pi:'+g.id,'aria-expanded':String(!!g.open),
+      title:g.open?'Click to collapse into the margin. Drag to reorder.':'Click to open. Drag to reorder.',
+      onclick:()=>{ g.open=!g.open; commit(); if(g.open) scrollTo(g.id); }},
+      h('i'),h('span',{class:'pt',text:g.title||'Untitled project'}),h('span',{class:'pn',text:n?`${dn}/${n}`:''}));
+    btn.addEventListener('dragstart',e=>{ e.dataTransfer.setData('application/x-goal',g.id); e.dataTransfer.effectAllowed='move'; });
+    const aft=e=>{ const r=li.getBoundingClientRect(); return e.clientY>r.top+r.height/2; };
+    li.addEventListener('dragover',e=>{ if(!e.dataTransfer.types.includes('application/x-goal')) return; e.preventDefault(); const x=aft(e); li.classList.toggle('gdrop-after',x); li.classList.toggle('gdrop-before',!x); });
+    li.addEventListener('dragleave',e=>{ if(!li.contains(e.relatedTarget)) li.classList.remove('gdrop-before','gdrop-after'); });
+    li.addEventListener('drop',e=>{ const id=e.dataTransfer.getData('application/x-goal'); if(!id) return; e.preventDefault(); li.classList.remove('gdrop-before','gdrop-after'); const src=goalById(id); if(src) moveGoal(src,g,aft(e)); });
+    li.append(btn); return li;
+  });
+  const allOpen=active.length&&active.every(g=>g.open);
+  const toc=h('aside',{class:'toc ptoc','aria-label':'Projects'},
+    h('div',{class:'tochd'},h('b',{text:'Projects'}),h('span',{class:'gcount',text:`${open.length} of ${active.length} open`})),
+    active.length?h('ul',{},items):h('p',{class:'libempty',text:'No open projects in this view.'}),
+    active.length?h('div',{class:'pacts'},
+      h('button',{class:'link',disabled:allOpen,onclick:()=>{ active.forEach(g=>g.open=true); commit(); }},'Open all'),
+      h('button',{class:'link',disabled:!open.length,onclick:()=>{ active.forEach(g=>g.open=false); commit(); }},'Collapse all')):null,
+    done.length?h('p',{class:'pdone',text:`${done.length} completed — listed below the open projects.`}):null);
+  const content=h('div',{});
+  if(!open.length){
+    content.append(h('div',{class:'pempty'},active.length
+      ?'All projects are collapsed into the margin. Click one on the left to open it here.'
+      :'No open projects here.'));
+  } else content.append(h('div',{class:'goals'},open.map((g,i)=>goalCard(g,i,open))));
   if(done.length){
-    wrap.append(h('h2',{class:'sub',text:`Completed (${done.length})`}),
+    content.append(h('h2',{class:'sub',text:`Completed (${done.length})`}),
       h('ul',{class:'donelist'},done.map(g=>h('li',{class:'donegoal',style:`--c:${themeOf(g.themeId).color}`},
-        h('i'),h('span',{text:g.title||'Untitled goal'}),
+        h('i'),h('span',{text:g.title||'Untitled project'}),
         h('button',{class:'link',onclick:()=>{g.done=false;commit()}},'Reopen'),goalDelete(g)))));
   }
+  wrap.append(h('div',{class:'projwrap'},toc,content));
   return wrap;
 }
 function moveGoal(g,target,after){
@@ -1940,8 +2350,8 @@ function moveGoal(g,target,after){
 function goalCard(g,gi,vis){
   const t=themeOf(g.themeId);
   const steps=allSteps(g), n=steps.length, dn=steps.filter(s=>s.done).length;
-  const card=h('section',{class:'goal',style:`--c:${t.color}`,'aria-label':g.title||'Untitled goal'});
-  const title=h('input',{class:'gtitle',type:'text',value:g.title||'',placeholder:'Name this goal','aria-label':'Goal name',
+  const card=h('section',{class:'goal',id:'proj-'+g.id,style:`--c:${t.color}`,'aria-label':g.title||'Untitled project'});
+  const title=h('input',{class:'gtitle',type:'text',value:g.title||'',placeholder:'Name this project','aria-label':'Project name',
     'data-autofocus':S.focus==='g:'+g.id?'1':null});
   title.addEventListener('input',()=>{g.title=title.value;save()});
   title.addEventListener('keydown',e=>{if(e.key==='Enter')title.blur()});
@@ -1949,7 +2359,7 @@ function goalCard(g,gi,vis){
     S.state.themes.map(x=>h('option',{value:x.id},x.name)));
   sel.value=t.id;
   const due=h('input',{type:'date',value:g.due||'','aria-label':'Target date',onchange:e=>{g.due=e.target.value;save()}});
-  const handle=h('span',{class:'ghandle',draggable:'true',title:'Drag to reorder goals','aria-hidden':'true'},'⠿');
+  const handle=h('span',{class:'ghandle',draggable:'true',title:'Drag to reorder projects','aria-hidden':'true'},'⠿');
   handle.addEventListener('dragstart',e=>{
     e.dataTransfer.setData('application/x-goal',g.id); e.dataTransfer.effectAllowed='move';
     try{ e.dataTransfer.setDragImage(card,20,20); }catch(err){}
@@ -1970,13 +2380,14 @@ function goalCard(g,gi,vis){
   });
   card.append(h('div',{class:'ghead'},handle,title),h('div',{class:'gmeta'},
     h('label',{},'Theme ',sel),h('label',{},'Target ',due),
-    h('button',{class:'gmove','aria-label':'Move goal up',title:'Move up','data-k':'gu:'+g.id,disabled:!vis||gi===0,onclick:()=>moveGoal(g,vis[gi-1],false)},'↑'),
-    h('button',{class:'gmove','aria-label':'Move goal down',title:'Move down','data-k':'gdn:'+g.id,disabled:!vis||gi===vis.length-1,onclick:()=>moveGoal(g,vis[gi+1],true)},'↓'),
+    h('button',{class:'gmove','aria-label':'Move project up',title:'Move up','data-k':'gu:'+g.id,disabled:!vis||gi===0,onclick:()=>moveGoal(g,vis[gi-1],false)},'↑'),
+    h('button',{class:'gmove','aria-label':'Move project down',title:'Move down','data-k':'gdn:'+g.id,disabled:!vis||gi===vis.length-1,onclick:()=>moveGoal(g,vis[gi+1],true)},'↓'),
     h('span',{class:'spacer'}),
-    h('button',{class:'link',onclick:()=>{g.done=true;commit()}},'Mark done'),goalDelete(g)));
+    h('button',{class:'link',onclick:()=>{g.done=true;g.open=false;commit()}},'Mark done'),goalDelete(g),
+    h('button',{class:'pcollapse','data-k':'pc:'+g.id,title:'Collapse into the margin',onclick:()=>{g.open=false;commit()}},'⇤ Collapse')));
   card.append(h('div',{class:'progress'},
     n?h('div',{class:'bar',role:'progressbar','aria-valuemin':'0','aria-valuemax':String(n),'aria-valuenow':String(dn),'aria-label':'Tasks done'},h('i',{style:`width:${Math.round(dn/n*100)}%`})):null,
-    h('span',{text:n?`${dn} of ${n} tasks across ${g.subs.length} sub-goal${g.subs.length===1?'':'s'}`:(g.subs.length?'No tasks yet':'Break this goal into sub-goals')})));
+    h('span',{text:n?`${dn} of ${n} tasks across ${g.subs.length} sub-goal${g.subs.length===1?'':'s'}`:(g.subs.length?'No tasks yet':'Break this project into sub-goals')})));
   const row=h('div',{class:'subs'});
   g.subs.forEach((sub,si)=>row.append(subCard(g,sub,si)));
   row.append(h('button',{class:'addsub',onclick:()=>{ const sub={id:uid(),title:'',steps:[]}; g.subs.push(sub); S.focus='sub:'+sub.id; commit(); }},'+ Add sub-goal'));
@@ -2021,7 +2432,7 @@ function subCard(g,sub,si){
   box.append(h('div',{class:'subprog'},
     n?h('div',{class:'bar'},h('i',{style:`width:${Math.round(dn/n*100)}%`})):null,
     h('span',{text:n?`${dn}/${n}`:'No tasks yet'})));
-  const ul=h('ul',{class:'steps'});
+  const ul=h('ul',{class:'steps','data-sid':sub.id});
   sub.steps.forEach(s=>{
     const ed=S.editing, isEd=ed&&ed.kind==='step'&&ed.id===s.id;
     const edSpec={kind:'step',id:s.id,goalId:g.id,draft:s.text};
@@ -2206,7 +2617,19 @@ themeDlg.addEventListener('click',e=>{ if(e.target===themeDlg) themeDlg.close();
 themeDlg.addEventListener('close',()=>{S.confirm=null});
 
 /* ---------- shell ---------- */
-function renderMain(){ main.replaceChildren(S.view==='week'?renderWeek():S.view==='library'?renderLibrary():S.view==='pantry'?renderPantry():S.view==='recipes'?renderRecipes():renderGoals()); setGripHeight(); }
+const SUB_SHOW=5;
+function capSubLists(prev){
+  main.querySelectorAll('.goal:not(.recipe) .sub .steps[data-sid]').forEach(ul=>{
+    const lis=ul.querySelectorAll(':scope > li'); ul.classList.remove('capped');
+    if(lis.length<=SUB_SHOW) return;
+    const top=ul.getBoundingClientRect().top, bot=lis[SUB_SHOW-1].getBoundingClientRect().bottom;
+    ul.style.setProperty('--sh',Math.ceil(bot-top)+'px'); ul.classList.add('capped');
+    const sid=ul.dataset.sid;
+    if(S.focus==='s:'+sid) ul.scrollTop=ul.scrollHeight; else if(prev[sid]) ul.scrollTop=prev[sid];
+  });
+}
+function renderMain(){ const prev={}; main.querySelectorAll('.steps.capped[data-sid]').forEach(ul=>{prev[ul.dataset.sid]=ul.scrollTop});
+  main.replaceChildren(S.view==='week'?renderWeek():S.view==='library'?renderLibrary():S.view==='pantry'?renderPantry():S.view==='recipes'?renderRecipes():renderGoals()); setGripHeight(); capSubLists(prev); }
 function render(){
   const ak=document.activeElement&&document.activeElement.dataset?document.activeElement.dataset.k:null;
   $('tab-week').setAttribute('aria-selected',String(S.view==='week'));
