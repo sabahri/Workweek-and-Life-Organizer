@@ -1,20 +1,36 @@
-# Planner
+# Workweek-and-Life organiser
 
-A single-page personal planner that runs entirely in the browser. No server, no build step, no dependencies beyond two Google Fonts.
+A single-page personal planner that runs entirely in the browser: no build step, no server, no dependencies beyond two Google Fonts.
 
-## Tabs
+## Views
 
-- **Week**: the same week repeated once per theme (for example Work, Personal, Meals), with a "This week" row for tasks without a set day, all-day events, priority flags, done/not-done marks, sub-tasks, colour-coded sub-themes, money spent with daily totals, optional day sections (Breakfast, Lunch, Dinner, Snacks, Exercise, Water), resizable day columns and a month calendar below.
-- **Projects**: projects split into sub-goals, each with tasks and sub-tasks. Tasks can be scheduled onto the week.
-- **Library**: books grouped into genres and subgenres, with reading status, interest level, series, search and drag-and-drop.
-- **Recipes**: recipes in categories, with parts and components, automatic calorie, carb and protein totals (overall and per serving), remembered ingredients and pasted ingredient lists.
-- **Pantry**: a spreadsheet-style inventory with several packs per item, each with its own amount, calories and expiry date (calories can be worked out from kcal per 100 g or 100 ml), plus a calorie total and how many days of food that is for your household, and water listed separately with how many days of drinking water you have.
+- **Week**: one row per theme (Work, Personal, …) across seven days, plus a "This week" row for tasks without a set day, an all-day event strip, an optional daily spending row and a month overview. Tasks can be dragged between days and themes, flagged high priority, given sub-tasks, sub-themes and amounts spent.
+- **Projects**: projects split into sub-goals, each with its own task list. Sub-goals pack into a tight masonry grid, and any sub-goal can be starred as **active** (highlighted in dark orange). Give a task a date and it appears on the week.
+- **Library**: a book catalogue grouped into genres and subgenres, with reading status, interest rating, languages and series.
+- **Recipes**: recipes split into parts and components, with calories, carbs and protein that add up per part and per serving. The app learns an ingredient's nutrition once and scales it next time.
+- **Pantry**: items with multiple packs, expiry dates, calories per 100 g/ml, a "still needed" list, and how many days of food and water you have.
 
 ## Running it
 
-Open `index.html` in a browser. Data is saved in that browser's local storage.
-Use **Export backup** and **Import backup** at the top to save or move your data as a JSON file.
+Open `index.html` in a browser, or serve the folder locally:
 
-## Data
+```sh
+python3 -m http.server
+# then open http://localhost:8000
+```
 
-No personal data is stored in this repository. All entries live in the browser, or in backup files you keep yourself. Backup files (`planner-backup-*.json`) are listed in `.gitignore` so they don't get committed by accident.
+It also works on GitHub Pages: in the repo settings, set Pages to deploy from the `main` branch, root folder.
+
+## Where data lives
+
+Everything is saved to the browser's `localStorage` (key `planner-state-v1`), so it stays on that device and in that browser. Use **Export backup** to download a JSON file and **Import backup** to restore it, or to move your data to another browser or device.
+
+When the page runs as a claude.ai artifact it also syncs to the owner's account. Outside claude.ai that code finds nothing to connect to and is skipped.
+
+## Files
+
+```
+index.html     markup and dialogs
+css/style.css  all styles, light and dark themes
+js/app.js      all behaviour and rendering
+```

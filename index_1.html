@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <h1>Planner</h1>
+    <span id="sync" class="sync" aria-live="polite">Saved on this device</span>
+    <span class="backup">
+      <button class="link" id="exportBtn">Export backup</button>
+      <button class="link" id="importBtn">Import backup</button>
+      <input type="file" id="importFile" accept=".json,application/json" hidden>
+    </span>
+  </div>
+  <div class="tabs" role="tablist" aria-label="Views">
+    <button role="tab" id="tab-week" aria-selected="true">Week</button>
+    <button role="tab" id="tab-goals" aria-selected="false">Projects</button>
+    <button role="tab" id="tab-library" aria-selected="false">Library</button>
+    <button role="tab" id="tab-recipes" aria-selected="false">Recipes</button>
+    <button role="tab" id="tab-pantry" aria-selected="false">Pantry</button>
+  </div>
+  <div class="weeknav" id="weeknav">
+    <button class="icon" id="prev" aria-label="Previous week">&#8249;</button>
+    <button class="pill" id="thisweek">This week</button>
+    <button class="icon" id="next" aria-label="Next week">&#8250;</button>
+    <div class="wlabel" id="wlabel"></div>
+  </div>
+</header>
+<main id="main"></main>
+
+<dialog id="themeDlg" aria-labelledby="themeDlgTitle">
+  <div class="dlghead"><h2 id="themeDlgTitle">Themes and colours</h2><button class="icon" id="closeDlg" aria-label="Close">&times;</button></div>
+  <h3 class="dlgsec">Week rows</h3>
+  <p class="dlgnote">Each theme gets its own row of the week. Order here is the order on the page.</p>
+  <div id="themeList"></div>
+  <button class="pill" id="addTheme">Add theme</button>
+  <div id="wsRow" class="moneyrow"></div>
+  <h3 class="dlgsec">Today highlight</h3>
+  <div id="hiRow" class="hirow"></div>
+  <h3 class="dlgsec">All-day event types</h3>
+  <p class="dlgnote">Each type has its own colour in the All day row.</p>
+  <div id="evTypeList"></div>
+  <button class="pill" id="addEvType">Add event type</button>
+  <h3 class="dlgsec">Money</h3>
+  <p class="dlgnote">Click a task to note what it cost.</p>
+  <div id="moneyRow" class="moneyrow"></div>
+  <h3 class="dlgsec" id="tagSec">Sub-themes</h3>
+  <p class="dlgnote">Colour-code tasks within any row, like Gardening in Personal. Click a task to give it a sub-theme.</p>
+  <div id="tagList"></div>
+  <button class="pill" id="addTag">Add sub-theme</button>
+</dialog>
+
+<dialog id="evDlg" aria-labelledby="evDlgTitle">
+  <div class="dlghead"><h2 id="evDlgTitle">All-day event</h2><button class="icon" id="evClose" aria-label="Close">&times;</button></div>
+  <div class="evform">
+    <label>Name<input id="evName" type="text" placeholder="e.g. Birthday, conference"></label>
+    <label>Type<select id="evType"></select></label>
+    <div class="evdates"><label>From<input id="evFrom" type="date"></label><label>To<input id="evTo" type="date"></label></div>
+    <div class="evdates"><label>Start time<input id="evT1" type="time"></label><label>End time<input id="evT2" type="time"></label></div>
+    <label>Notes<textarea id="evNotes" rows="3" placeholder="Location, what to bring, who's going… (optional)"></textarea></label>
+    <label>Website<span class="urlrow"><input id="evUrl" type="url" inputmode="url" placeholder="https://… (optional)"><a id="evUrlOpen" class="urlopen" target="_blank" rel="noopener noreferrer" hidden>Open ↗</a></span></label>
+    <label class="chk"><input id="evYearly" type="checkbox"> Repeats every year</label>
+  </div>
+  <div class="evacts">
+    <button class="link danger" id="evDel">Delete event</button><span class="spacer"></span>
+    <button class="pill" id="evCancel">Cancel</button><button class="pill primary" id="evSave">Save</button>
+  </div>
+</dialog>
+
+<dialog id="impDlg" aria-labelledby="impTitle">
+  <div class="dlghead"><h2 id="impTitle">Restore this backup?</h2></div>
+  <p id="impText" class="dlgnote"></p>
+  <div class="evacts"><span class="spacer"></span>
+    <button class="pill" id="impCancel">Cancel</button><button class="pill primary" id="impOk">Replace with backup</button></div>
+</dialog>
+
+<dialog id="bookDlg" aria-labelledby="bookDlgTitle">
+  <div class="dlghead"><h2 id="bookDlgTitle">Book</h2><button class="icon" id="bookClose" aria-label="Close">&times;</button></div>
+  <div class="evform">
+    <label>Title<input id="bkTitle" type="text"></label>
+    <label>Author<input id="bkAuthor" type="text" placeholder="Leave blank if unknown"></label>
+    <div class="bkstatus" role="radiogroup" aria-label="Reading status" id="bkStatus">
+      <button type="button" role="radio" data-v="">○ Not started</button>
+      <button type="button" role="radio" data-v="reading" class="rd">◐ Reading</button>
+      <button type="button" role="radio" data-v="read" class="dn">● Read</button>
+    </div>
+    <div class="bkint" role="radiogroup" aria-label="Interest level" id="bkInt">
+      <button type="button" role="radio" data-v="">Not rated</button>
+      <button type="button" role="radio" data-v="1">★</button>
+      <button type="button" role="radio" data-v="2">★★</button>
+      <button type="button" role="radio" data-v="3">★★★</button>
+    </div>
+    <label>Genre<select id="bkGenre"></select></label>
+    <div id="bkNewWrap" class="evdates" hidden>
+      <label>New subgenre<input id="bkNewGenre" type="text" placeholder="e.g. Geology"></label>
+      <label>Under<select id="bkNewGroup"></select></label>
+    </div>
+    <div class="bkser">
+      <label>Books in series<input id="bkVols" type="number" min="1" step="1" placeholder="1"></label>
+      <label>Combine with another entry<select id="bkMerge"></select></label>
+    </div>
+    <div id="bkMerged" class="mchips" aria-live="polite"></div>
+    <label>Language<input id="bkLang" type="text" list="bkLangs" placeholder="English if blank"></label>
+    <datalist id="bkLangs"></datalist>
+    <label>Notes<input id="bkNotes" type="text" placeholder="Edition, where it is, lent to…"></label>
+  </div>
+  <p id="bkErr" class="bkerr" role="alert"></p>
+  <div class="evacts">
+    <button class="link danger" id="bkDel">Delete book</button><span class="spacer"></span>
+    <button class="pill" id="bkCancel">Cancel</button><button class="pill primary" id="bkSave">Save</button>
+  </div>
+</dialog>
+
+<script src="js/app.js"></script>
+</body>
+</html>
